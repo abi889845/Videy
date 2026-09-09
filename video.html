@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Video Tutorial Premium</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            width: 100%;
+            min-height: 100vh;
+            overflow-x: hidden;
+
+            background: linear-gradient(135deg, #0b1020 0%, #1a1f3a 50%, #0f1629 100%);
+            background-size: 400% 400%;
+            animation: bgMove 15s ease infinite;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        @keyframes bgMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Partikel latar */
+        .particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 10s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Container utama */
+        .video-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Judul */
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            animation: fadeDown 0.8s ease-out;
+        }
+
+        .header h1 {
+            font-size: clamp(24px, 5vw, 42px);
+            color: white;
+            font-weight: 800;
+            text-shadow: 0 0 30px rgba(80, 180, 255, 0.4);
+            margin-bottom: 6px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 15px;
+        }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Kotak Video — RASIO 16:9 OTOMATIS */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #000;
+            box-shadow: 
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+                0 20px 50px rgba(0, 0, 0, 0.5),
+                0 0 80px rgba(80, 160, 255, 0.1);
+            animation: fadeUp 0.8s ease-out 0.2s both;
+        }
+
+        /* Garis cahaya berkilau */
+        .video-wrapper::before {
+            content: "";
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(
+                45deg,
+                rgba(80, 180, 255, 0),
+                rgba(80, 180, 255, 0.4),
+                rgba(255, 200, 120, 0.3),
+                rgba(80, 180, 255, 0.4),
+                rgba(80, 180, 255, 0)
+            );
+            background-size: 400% 400%;
+            border-radius: 22px;
+            z-index: -1;
+            animation: borderGlow 4s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            cursor: pointer;
+            background: #000;
+        }
+
+        /* Tombol Play overlay */
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .play-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translate(-50%, -50%) scale(0.5);
+        }
+
+        .play-overlay::after {
+            content: "▶";
+            font-size: 32px;
+            color: white;
+            margin-left: 4px;
+        }
+
+        .play-overlay:hover {
+            transform: translate(-50%, -50%) scale(1.15);
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 40px rgba(80, 180, 255, 0.4);
+        }
+
+        /* Info bawah video */
+        .info-bar {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            animation: fadeIn 0.8s ease-out 0.4s both;
+        }
+
+        .info-tag {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 50px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 13px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .info-tag:hover {
+            background: rgba(80, 180, 255, 0.15);
+            border-color: rgba(80, 180, 255, 0.35);
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Tombol aksi */
+        .action-buttons {
+            margin-top: 24px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeIn 0.8s ease-out 0.6s both;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            white-space: nowrap;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #238cff, #0878ee);
+            color: white;
+            box-shadow: 0 4px 20px rgba(0, 120, 238, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(0, 120, 238, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            box-shadow: 0 4px 20px rgba(22, 163, 74, 0.35);
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(22, 163, 74, 0.45);
+        }
+
+        button:active, a.btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Khusus HP */
+        @media (max-width: 480px) {
+            body { padding: 12px; }
+            .header { margin-bottom: 16px; }
+            .header h1 { font-size: 22px; }
+            .video-wrapper { border-radius: 16px; }
+            .play-overlay { width: 70px; height: 70px; }
+            .play-overlay::after { font-size: 28px; }
+            .btn { padding: 10px 16px; font-size: 13px; }
+            .info-tag { font-size: 12px; padding: 6px 12px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Partikel latar -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Konten Utama -->
+    <div class="video-container">
+
+        <div class="header">
+            <h1>🎬 Video Premium</h1>
+            <p>Tonton selengkapnya</p>
+        </div>
+
+        <div class="video-wrapper" id="videoWrapper">
+            <video id="myVideo" playsinline webkit-playsinline>
+                <!-- Ganti src dengan nama file videomu! -->
+                <source src="video.mp4" type="video/mp4">
+                Browser kamu tidak mendukung pemutar video.
+            </video>
+
+            <div class="play-overlay" id="playBtn" onclick="putarVideo()"></div>
+        </div>
+
+        <div class="info-bar">
+            <span class="info-tag">⏱ Durasi: Singkat</span>
+            <span class="info-tag">📱 Full HD</span>
+            <span class="info-tag">Biasa ajaa </span>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="putarVideo()">▶ Tonton</button>
+            <button class="btn btn-secondary" onclick="layarPenuh()">⛶ Layar Penuh</button>
+            <!-- ✅ TOMBOL UNDUH -->
+            <a class="btn btn-download" href="video.mp4" download>📥 Unduh Video</a>
+        </div>
+
+    </div>
+
+
+<script>
+    // Buat partikel otomatis
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 40; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDelay = Math.random() * 10 + 's';
+        p.style.animationDuration = (6 + Math.random() * 8) + 's';
+        particlesContainer.appendChild(p);
+    }
+
+    // Fungsi video
+    const video = document.getElementById('myVideo');
+    const playBtn = document.getElementById('playBtn');
+
+    function putarVideo() {
+        if (video.paused) {
+            video.play();
+        } else {
+            video.pause();
+        }
+    }
+
+    function layarPenuh() {
+        if (video.requestFullscreen) {
+            video.requestFullscreen();
+        } else if (video.webkitRequestFullscreen()) {
+            video.webkitRequestFullscreen();
+        }
+    }
+
+    video.addEventListener('play', () => {
+        playBtn.classList.add('hidden');
+    });
+
+    video.addEventListener('pause', () => {
+        playBtn.classList.remove('hidden');
+    });
+
+    video.addEventListener('ended', () => {
+        playBtn.classList.remove('hidden');
+    });
+
+    // Klik video = play/pause
+    video.addEventListener('click', putarVideo);
+</script>
+
+</body>
+</html>
