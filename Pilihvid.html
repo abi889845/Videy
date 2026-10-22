@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Videy — Video Pilihan</title>
+
+<!-- Kode Iklan Adsterra (Popunder & Social Bar) -->
+<script data-cfasync="false" src="https://aarems.org/1/c12d33e4d871135170de09149ef5a5a8"></script>
+<script data-cfasync="false" src="https://bancadeltempoidea.org/14/e398c38618f25597d123bf8b4a6cc5f9"></script>
+
+<style>
+:root {
+  --bg: #ffffff;
+  --card: #f8f9fa;
+  --card-hover: #eef1f5;
+  --text: #111111;
+  --muted: #6b7280;
+  --accent: #111111;
+  --line: #e5e7eb;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  min-height: 100vh;
+}
+
+.container {
+  width: min(1200px, 94%);
+  margin: auto;
+  padding: 30px 20px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  background: #111;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-weight: 900;
+  font-size: 20px;
+}
+
+.brand-name {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.brand-name span {
+  color: var(--accent);
+}
+
+header p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* TAB */
+.tabs {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  flex-shrink: 0;
+  padding: 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: .2s;
+}
+
+.tab:hover {
+  color: #374151;
+}
+
+.tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ANIMASI */
+.tab-content {
+  display: none;
+  animation: fadeIn .3s ease;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* PENCARIAN */
+.search-area {
+  margin-bottom: 24px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  transition: .2s;
+}
+
+.search-box:focus-within {
+  border-color: var(--accent);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(17,17,17,.07);
+}
+
+.search-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.search-input {
+  width: 100%;
+  min-width: 0;
+  padding: 14px 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 15px;
+}
+
+.search-input::placeholder {
+  color: var(--muted);
+}
+
+.clear-search {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 23px;
+  padding: 4px;
+  cursor: pointer;
+  display: none;
+  flex-shrink: 0;
+}
+
+.search-status {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--muted);
+  min-height: 18px;
+}
+
+/* GRID */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.video-grid.vertical-grid {
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+/* KARTU */
+.video-card {
+  background: var(--card);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: .25s;
+  border: 1px solid transparent;
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+
+.video-card:hover {
+  background: var(--card-hover);
+  transform: translateY(-3px);
+  border-color: var(--accent);
+}
+
+.video-card[hidden] {
+  display: none !important;
+}
+
+/* THUMBNAIL HORIZONTAL */
+.thumbnail {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  position: relative;
+  overflow: hidden;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* THUMBNAIL VERTIKAL */
+.thumbnail.vertical {
+  aspect-ratio: 9 / 16;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  transition: transform .3s ease;
+}
+
+.video-card:hover .thumbnail img {
+  transform: scale(1.04);
+}
+
+/* TOMBOL PLAY */
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px;
+  height: 52px;
+  background: rgba(0,0,0,.72);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 4px;
+  font-size: 23px;
+  pointer-events: none;
+  transition: background .2s;
+}
+
+.video-card:hover .play-button {
+  background: #111;
+}
+
+/* DURASI */
+.duration {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  background: rgba(0,0,0,.8);
+  color: white;
+  font-size: 11px;
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+/* INFORMASI */
+.info {
+  padding: 14px;
+}
+
+.judul {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* HASIL KOSONG */
+.empty-result {
+  display: none;
+  padding: 35px 15px;
+  text-align: center;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  color: var(--muted);
+}
+
+.empty-result.show {
+  display: block;
+}
+
+.empty-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.empty-result h3 {
+  color: var(--text);
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.empty-result p {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* RESPONSIF */
+@media (max-width: 480px) {
+  .container {
+    width: 100%;
+    padding: 20px 12px;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 30px;
+  }
+
+  .tabs {
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .tab {
+    padding: 10px 0;
+    font-size: 13px;
+  }
+
+  .video-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .video-grid.vertical-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .info {
+    padding: 12px;
+  }
+
+  .search-input {
+    font-size: 14px;
+  }
+
+  .play-button {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo-wrap">
+      <div class="logo">V</div>
+      <div class="brand-name">Vid<span>ey</span></div>
+    </div>
+    <p>Video pilihan terbaik untukmu ✨</p>
+  </header>
+
+  <!-- 4 TAB VIDEO -->
+  <div class="tabs">
+    <button class="tab active" data-tab="panjang">🎥 corn 16:9</button>
+    <button class="tab" data-tab="pendek">📱 k@rt3l 16:9</button>
+    <button class="tab" data-tab="panjang-vertikal">🎬 corn 9:16</button>
+    <button class="tab" data-tab="pendek-vertikal">📲 k@rt3l 9:16</button>
+  </div>
+
+  <!-- VIDEO PANJANG 16:9 -->
+  <div class="tab-content active" id="panjang">
+    <div class="search-area">
+      <div class="search-box">
+        <span class="search-icon">🔎</span>
+        <input type="search" class="search-input" placeholder="Cari video panjang..." autocomplete="off">
+        <button type="button" class="clear-search" aria-label="Hapus pencarian">×</button>
+      </div>
+      <p class="search-status" aria-live="polite"></p>
+    </div>
+
+    <div class="video-grid">
+      <a href="pilihdata.html" class="video-card">
+        <div class="thumbnail">
+          <img src="cikini(b).jpg" alt="Thumbnail Cikini">
+          <div class="play-button">▶</div>
+          <span class="duration">0:39</span>
+        </div>
+        <div class="info">
+          <div class="judul">cikini</div>
+          <div class="desc">Klik untuk menonton video ini</div>
+        </div>
+      </a>
+
+      <a href="pilihdata.html" class="video-card">
+        <div class="thumbnail">
+          <img src="3keponakan(b).jpg" alt="Thumbnail video kedua" loading="lazy">
+          <div class="play-button">▶</div>
+          <span class="duration">08:45</span>
+        </div>
+        <div class="info">
+          <div class="judul">3 keponakan main bareng</div>
+          <div class="desc">Klik untuk menonton video ini</div>
+        </div>
+      </a>
+
+      <a href="pilihdata.html" class="video-card">
+        <div class="thumbnail">
+          <img src="santaisikitlahpakcik(b).jpg" alt="Thumbnail video ketiga" loading="lazy">
+          <div class="play-button">▶</div>
+          <span class="duration">4:20</span>
+        </div>
+        <div class="info">
+          <div class="judul">santai sikit lah pak cik</div>
+          <div class="desc">Klik untuk menonton video ini</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="empty-result">
+      <div class="empty-icon">🔍</div>
+      <h3>Video tidak ditemukan</h3>
+      <p>Coba kata kunci lain atau hapus pencarian.</p>
+    </div>
+  </div>
+
+  <!-- VIDEO PENDEK 16:9 -->
+  <div class="tab-content" id="pendek">
+    <div class="search-area">
+      <div class="search-box">
+        <span class="search-icon">🔎</span>
+        <input type="search" class="search-input" placeholder="Cari video pendek..." autocomplete="off">
+        <button type="button" class="clear-search" aria-label="Hapus pencarian">×</button>
+      </div>
+      <p class="search-status" aria-live="polite"></p>
+    </div>
+
+    <div class="video-grid">
+      <a href="pilihdata.html" class="video-card">
+        <div class="thumbnail">
+          <img src="elpatron(k).jpg" alt="Thumbnail elpatron" loading="lazy">
+          <div class="play-button">▶</div>
+          <span class="duration">00:30</span>
+        </div>
+        <div class="info">
+          <div class="judul">elpatron</div>
+          <div class="desc">klik untuk menonton video</div>
+        </div>
+      </a>
+
+      <a href="pilihdata.html" class="video-card">
+        <div class="thumbnail">
+          <img src="orangpirangbajubirutua(k).jpg" alt="Thumbnail video pendek kedua" loading="lazy">
+          <div class="play-button">▶</div>
+          <span class="duration">04:45</span>
+        </div>
+        <div class="info">
+          <div class="judul">cwok rambut oren baju hitam</div>
+          <div class="desc">klik untuk menonton video</div>
+        </div>
+      </a>
+
+      <a href="pilihdata.html" class="video-card">
+        <div class="thumbnail">
+          <img src="bigbroduduk(k).jpg" alt="Thumbnail video pendek ketiga" loading="lazy">
+          <div class="play-button">▶</div>
+          <span class="duration">00:20</span>
+        </div>
+        <div class="info">
+          <div class="judul">priabesar yang duduk</div>
+          <div class="desc">klik untuk menonton video</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="empty-result">
+      <div class="empty-icon">🔍</div>
+      <h3>Video tidak ditemukan</h3>
+      <p>Coba kata kunci lain atau hapus pencarian.</p>
+    </div>
+  </div>
+
+  <!-- VIDEO PANJANG VERTIKAL 9:16 -->
+  <div class="tab-content" id="panjang-vertikal">
+    <div class="search-area">
+      <div class="search-box">
+        <span class="search-icon">🔎</span>
+        <input type="search" class="search-input" placeholder="Cari video panjang vertikal..." autocomplete="off">
+        <button type="button" class="clear-search" aria-label="Hapus pencarian">×</button>
+      </div>
+      <p class="search-status" aria-live="polite"></p>
+    </div>
+
+    <div class="video-grid vertical-grid">
+      <a href="pilihdata.html" class="video-card">
+        <div class="thumbnail vertical">
+          <img src="bocilbajupinkrambutoren(b).jpg" alt="Thumbnail video panjang vertikal">
+          <div class="play-button">▶</div>
+          <span class="duration">08:45</span>
+        </div>
+        <div class="info">
+          <div class="judul">bocil blond berbaju merah muda</div>
+          <div class="desc">Klik untuk menonton video ini</div>
+        </div>
+      </a>
+
+      <a href="pilihdata.html" class="video-card">
+        <div class="thumbnail vertical">
+          <img src="bocilsdbanguntidur(b).jpg" alt="Thumbnail video panjang vertikal kedua" loading="lazy">
+          <div class="play-button">▶</div>
+          <span class="duration">03:20</span>
+        </div>
+        <div class="info">
+          <div class="judul">Video Panjang Vertikal 2</div>
+          <div class="desc">Klik untuk menonton video ini</div>
+        </div>
+      </a>
+
+      <a href="pilihdata.html" class="video-card">
+        <div class="thumbnail vertical">
+          <img src="bocilsenyumbajumerahputihungu(b).jpg" alt="Thumbnail video panjang vertikal ketiga" loading="lazy">
+          <div class="play-button">▶</div>
+          <span class="duration">6:10</span>
+        </div>
+        <div class="info">
+          <div class="judul">bocil di kasi hariah senyum-senyum loh ya </div>
+          <div class="desc">Klik untuk menonton video ini</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="empty-result">
+      <div class="empty-icon">🔍</div>
+      <h3>Video tidak ditemukan</h3>
+      <p>Coba kata kunci lain atau hapus pencarian.</p>
+    </div>
+  </div>
+
+  <!-- VIDEO PENDEK VERTIKAL 9:16 -->
+  <div class="tab-content" id="pendek-vertikal">
+    <div class="search-area">
+      <div class="search-box">
+        <span class="search-icon">🔎</span>
+        <input type="search" class="search-input" placeholder="Cari video pendek vertikal..." autocomplete="off">
+        <button type="button" class="clear-search" aria-label="Hapus pencarian">×</button>
+      </div>
+      <p class="search-status" aria-live="polite"></p>
+    </div>
+
+    <div class="video-grid vertical-grid">
+      <a href="pilihdata.html" class="video-card">
+        <div class="thumbnail vertical">
+          <img src="jadighostrider(k).jpg" alt="Thumbnail video pendek vertikal pertama">
+          <div class="play-button">▶</div>
+          <span class="duration">00:30</span>
+        </div>
+        <div class="info">
+          <div class="judul">jadi ghost rider loh ya</div>
+          <div class="desc">klik untuk menonton video</div>
+        </div>
+      </a>
+
+      <a href="pilihdata.html" class="video-card">
+        <div class="thumbnail vertical">
+          <img src="pakaguspotongkuku(k).jpg" alt="Thumbnail video pendek vertikal kedua" loading="lazy">
+          <div class="play-button">▶</div>
+          <span class="duration">00:45</span>
+        </div>
+        <div class="info">
+          <div class="judul">pak agus mau potong kuku loh ya</div>
+          <div class="desc">klik untuk menonton video</div>
+        </div>
+      </a>
+
+      <a href="pilihdata.html" class="video-card">
+        <div class="thumbnail vertical">
+          <img src="masgilanghaus(k).jpg" alt="Thumbnail video pendek vertikal ketiga" loading="lazy">
+          <div class="play-button">▶</div>
+          <span class="duration">00:20</span>
+        </div>
+        <div class="info">
+          <div class="judul">mas gilang lagi haus loh ya</div>
+          <div class="desc">klik untuk menonton video</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="empty-result">
+      <div class="empty-icon">🔍</div>
+      <h3>Video tidak ditemukan</h3>
+      <p>Coba kata kunci lain atau hapus pencarian.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* SISTEM TAB */
+const tabs = document.querySelectorAll('.tab');
+const contents = document.querySelectorAll('.tab-content');
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    contents.forEach(c => c.classList.remove('active'));
+
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab).classList.add('active');
+  });
+});
+
+/* SISTEM PENCARIAN TERPISAH */
+document.querySelectorAll('.tab-content').forEach(section => {
+  const input = section.querySelector('.search-input');
+  const clearButton = section.querySelector('.clear-search');
+  const status = section.querySelector('.search-status');
+  const cards = [...section.querySelectorAll('.video-card')];
+  const emptyResult = section.querySelector('.empty-result');
+
+  function normalizeText(text) {
+    return text
+      .toLocaleLowerCase('id-ID')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim();
+  }
+
+  function searchVideos() {
+    const keyword = normalizeText(input.value);
+    const words = keyword.split(/\s+/).filter(Boolean);
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const title = card.querySelector('.judul')?.textContent || '';
+      const description = card.querySelector('.desc')?.textContent || '';
+      const searchableText = normalizeText(title + ' ' + description);
+
+      const matched = words.every(word => searchableText.includes(word));
+
+      card.hidden = !matched;
+      if (matched) visibleCount++;
+    });
+
+    clearButton.style.display = input.value.length > 0 ? 'block' : 'none';
+    emptyResult.classList.toggle('show', visibleCount === 0);
+
+    if (keyword === '') {
+      status.textContent = `${cards.length} video tersedia`;
+    } else {
+      status.textContent = visibleCount > 0
+        ? `${visibleCount} video ditemukan`
+        : 'Tidak ada hasil yang cocok';
+    }
+  }
+
+  input.addEventListener('input', searchVideos);
+
+  clearButton.addEventListener('click', () => {
+    input.value = '';
+    searchVideos();
+    input.focus();
+  });
+
+  searchVideos();
+});
+</script>
+
+</body>
+</html>
