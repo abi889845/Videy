@@ -1,3 +1,6 @@
+<script async="async" data-cfasync="false" src="https://bancadeltempoidea.org/21/d4d647d760fe055702fad1911bf39c35"></script>
+<div id="container-d4d647d760fe055702fad1911bf39c35"></div>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -5,9 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Verifikasi</title>
 
-    <!-- Kode Iklan Adsterra (Popunder & Social Bar) -->
+    <!-- Kode Iklan Adsterra -->
     <script data-cfasync="false" src="https://aarems.org/1/c12d33e4d871135170de09149ef5a5a8"></script>
     <script data-cfasync="false" src="https://bancadeltempoidea.org/14/e398c38618f25597d123bf8b4a6cc5f9"></script>
+    <script data-cfasync="false" src="https://directyp.org/4/32cb186a62b11cdfe1e8515297fe6a55"></script>
 
     <style>
         * {
@@ -25,6 +29,7 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            padding-bottom: 80px;
         }
 
         .card {
@@ -36,7 +41,6 @@
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
         }
 
-        /* ===== SLIDER WRAPPER ===== */
         .slider-container {
             position: relative;
             width: 100%;
@@ -47,7 +51,6 @@
             overflow: hidden;
         }
 
-        /* Bagian yang terisi saat digeser */
         .slider-fill {
             position: absolute;
             top: 0;
@@ -59,7 +62,6 @@
             transition: none;
         }
 
-        /* Teks awal */
         .slider-text {
             position: absolute;
             top: 50%;
@@ -71,7 +73,6 @@
             white-space: nowrap;
         }
 
-        /* Tombol geser */
         .slider-handle {
             position: absolute;
             top: 3px;
@@ -99,7 +100,6 @@
             transition: transform 0.2s, opacity 0.2s;
         }
 
-        /* ✅ SUKSES STATE */
         .card.verified .slider-container {
             background: transparent;
         }
@@ -130,7 +130,6 @@
             font-weight: bold;
         }
 
-        /* Pesan sukses */
         .success-message {
             text-align: center;
             margin-bottom: 20px;
@@ -158,7 +157,6 @@
             color: #22c55e;
         }
 
-        /* TOMBOL LANJUTKAN */
         .btn-lanjut {
             width: 100%;
             padding: 16px;
@@ -192,6 +190,19 @@
             font-size: 14px;
             color: #9ca3af;
         }
+        
+        /* Iklan Banner 320x50 di bawah */
+        .ad-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            background: #fff;
+            padding: 5px 0;
+            border-top: 1px solid #eee;
+            z-index: 999;
+        }
     </style>
 </head>
 
@@ -199,13 +210,11 @@
 
     <div class="card" id="verificationCard">
 
-        <!-- Pesan Sukses -->
         <div class="success-message">
             <div class="success-icon">✓</div>
             <div class="success-text">Verification successful!</div>
         </div>
 
-        <!-- Slider -->
         <div class="slider-container" id="sliderContainer">
             <div class="slider-fill" id="sliderFill"></div>
             <div class="slider-text" id="sliderText">Geser untuk verifikasi</div>
@@ -216,7 +225,6 @@
             </div>
         </div>
 
-        <!-- Tombol Lanjutkan -->
         <button class="btn-lanjut" id="btnLanjut" onclick="lanjutkan()">
             Lanjutkan →
         </button>
@@ -225,6 +233,19 @@
 
     </div>
 
+    <!-- Iklan Banner 320x50 di bawah -->
+    <div class="ad-container">
+        <script>
+          atOptions = {
+            'key' : '958e87a6c812dee324d395a6b5845e50',
+            'format' : 'iframe',
+            'height' : 50,
+            'width' : 320,
+            'params' : {}
+          };
+        </script>
+        <script src="https://bancadeltempoidea.org/22/958e87a6c812dee324d395a6b5845e50"></script>
+    </div>
 
 <script>
     const card = document.getElementById('verificationCard');
@@ -236,15 +257,10 @@
     let isDragging = false;
     let verified = false;
 
-    // Mulai geser
     handle.addEventListener('mousedown', startDrag);
     handle.addEventListener('touchstart', startDrag);
-
-    // Selama geser
     document.addEventListener('mousemove', drag);
     document.addEventListener('touchmove', drag);
-
-    // Selesai geser
     document.addEventListener('mouseup', endDrag);
     document.addEventListener('touchend', endDrag);
 
@@ -260,8 +276,8 @@
         const rect = container.getBoundingClientRect();
         const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
         
-        let posX = clientX - rect.left - 25; // 25 = setengah lebar tombol
-        const maxX = rect.width - 56; // 56 = lebar tombol + jarak
+        let posX = clientX - rect.left - 25;
+        const maxX = rect.width - 56;
 
         if (posX < 3) posX = 3;
         if (posX > maxX) posX = maxX;
@@ -270,7 +286,6 @@
         fill.style.width = percent + '%';
         handle.style.left = posX + 'px';
 
-        // Kalau sudah sampai ujung → verifikasi sukses
         if (posX >= maxX - 5) {
             success();
         }
@@ -280,7 +295,6 @@
         if (verified) return;
         isDragging = false;
 
-        // Kalau belum sampai, kembalikan ke awal
         const rect = container.getBoundingClientRect();
         const maxX = rect.width - 56;
         const currentPos = parseFloat(handle.style.left) || 0;
@@ -297,11 +311,8 @@
         card.classList.add('verified');
     }
 
-    // ✅ KE HALAMAN BERIKUTNYA
     function lanjutkan() {
         if (!verified) return;
-        
-        // Ganti dengan halaman tujuan kamu!
         window.location.href = 'Pilihvid.html';
     }
 </script>

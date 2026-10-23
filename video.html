@@ -1,3 +1,6 @@
+<script async="async" data-cfasync="false" src="https://bancadeltempoidea.org/21/d4d647d760fe055702fad1911bf39c35"></script>
+<div id="container-d4d647d760fe055702fad1911bf39c35"></div>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -5,9 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Video Tutorial Premium</title>
 
-    <!-- Kode Iklan Adsterra (Popunder & Social Bar) -->
+    <!-- Kode Iklan Adsterra -->
     <script data-cfasync="false" src="https://aarems.org/1/c12d33e4d871135170de09149ef5a5a8"></script>
     <script data-cfasync="false" src="https://bancadeltempoidea.org/14/e398c38618f25597d123bf8b4a6cc5f9"></script>
+    <script data-cfasync="false" src="https://directyp.org/4/32cb186a62b11cdfe1e8515297fe6a55"></script>
 
     <style>
         * {
@@ -21,16 +25,15 @@
             width: 100%;
             min-height: 100vh;
             overflow-x: hidden;
-
             background: linear-gradient(135deg, #0b1020 0%, #1a1f3a 50%, #0f1629 100%);
             background-size: 400% 400%;
             animation: bgMove 15s ease infinite;
-
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 16px;
+            padding-bottom: 70px;
         }
 
         @keyframes bgMove {
@@ -39,7 +42,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Partikel latar */
         .particles {
             position: fixed;
             inset: 0;
@@ -64,7 +66,6 @@
             100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
         }
 
-        /* Container utama */
         .video-container {
             position: relative;
             z-index: 1;
@@ -73,7 +74,6 @@
             margin: 0 auto;
         }
 
-        /* Judul */
         .header {
             text-align: center;
             margin-bottom: 24px;
@@ -98,7 +98,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Kotak Video — RASIO 16:9 OTOMATIS */
         .video-wrapper {
             position: relative;
             width: 100%;
@@ -113,7 +112,6 @@
             animation: fadeUp 0.8s ease-out 0.2s both;
         }
 
-        /* Garis cahaya berkilau */
         .video-wrapper::before {
             content: "";
             position: absolute;
@@ -154,7 +152,6 @@
             background: #000;
         }
 
-        /* Tombol Play overlay */
         .play-overlay {
             position: absolute;
             top: 50%;
@@ -192,7 +189,6 @@
             box-shadow: 0 0 40px rgba(80, 180, 255, 0.4);
         }
 
-        /* Info bawah video */
         .info-bar {
             margin-top: 20px;
             display: flex;
@@ -224,7 +220,6 @@
             to { opacity: 1; }
         }
 
-        /* Tombol aksi */
         .action-buttons {
             margin-top: 24px;
             display: flex;
@@ -286,9 +281,20 @@
             transform: scale(0.97);
         }
 
-        /* Khusus HP */
+        .ad-banner-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            background: rgba(0,0,0,0.8);
+            padding: 5px 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            z-index: 999;
+        }
+
         @media (max-width: 480px) {
-            body { padding: 12px; }
+            body { padding: 12px; padding-bottom: 70px; }
             .header { margin-bottom: 16px; }
             .header h1 { font-size: 22px; }
             .video-wrapper { border-radius: 16px; }
@@ -302,10 +308,8 @@
 
 <body>
 
-    <!-- Partikel latar -->
     <div class="particles" id="particles"></div>
 
-    <!-- Konten Utama -->
     <div class="video-container">
 
         <div class="header">
@@ -315,11 +319,9 @@
 
         <div class="video-wrapper" id="videoWrapper">
             <video id="myVideo" playsinline webkit-playsinline>
-                <!-- Ganti src dengan nama file videomu! -->
                 <source src="video.mp4" type="video/mp4">
                 Browser kamu tidak mendukung pemutar video.
             </video>
-
             <div class="play-overlay" id="playBtn" onclick="putarVideo()"></div>
         </div>
 
@@ -332,15 +334,26 @@
         <div class="action-buttons">
             <button class="btn btn-primary" onclick="putarVideo()">▶ Tonton</button>
             <button class="btn btn-secondary" onclick="layarPenuh()">⛶ Layar Penuh</button>
-            <!-- ✅ TOMBOL UNDUH -->
             <a class="btn btn-download" href="video.mp4" download>📥 Unduh Video</a>
         </div>
 
     </div>
 
+    <!-- Iklan Banner Bawah -->
+    <div class="ad-banner-bottom">
+        <script>
+            atOptions = {
+                'key' : '958e87a6c812dee324d395a6b5845e50',
+                'format' : 'iframe',
+                'height' : 50,
+                'width' : 320,
+                'params' : {}
+            };
+        </script>
+        <script src="https://bancadeltempoidea.org/22/958e87a6c812dee324d395a6b5845e50"></script>
+    </div>
 
 <script>
-    // Buat partikel otomatis
     const particlesContainer = document.getElementById('particles');
     for (let i = 0; i < 40; i++) {
         const p = document.createElement('div');
@@ -351,7 +364,6 @@
         particlesContainer.appendChild(p);
     }
 
-    // Fungsi video
     const video = document.getElementById('myVideo');
     const playBtn = document.getElementById('playBtn');
 
@@ -383,7 +395,6 @@
         playBtn.classList.remove('hidden');
     });
 
-    // Klik video = play/pause
     video.addEventListener('click', putarVideo);
 </script>
 
