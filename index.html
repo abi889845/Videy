@@ -1,37 +1,19 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html><html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#ffffff">
 <title>Verifikasi</title>
-
-<!-- Script iklan -->
-<script async data-cfasync="false"
-src="https://bancadeltempoidea.org/21/d4d647d760fe055702fad1911bf39c35"></script>
-
-<script data-cfasync="false"
-src="https://aarems.org/1/c12d33e4d871135170de09149ef5a5a8"></script>
-
-<script data-cfasync="false"
-src="https://bancadeltempoidea.org/14/e398c38618f25597d123bf8b4a6cc5f9"></script>
-
-<script data-cfasync="false"
-src="https://directyp.org/4/32cb186a62b11cdfe1e8515297fe6a55"></script>
-
 <style>
 * {
     box-sizing: border-box;
     font-family: Arial, sans-serif;
 }
-
 html {
     width: 100%;
     min-height: 100%;
 }
-
 body {
-    display: block;
     width: 100%;
     min-height: 100vh;
     margin: 0;
@@ -39,12 +21,9 @@ body {
     background: #f8f9fa;
     color: #202124;
 }
-
 .card {
-    display: block;
     width: 100%;
     max-width: 400px;
-    min-width: 0;
     margin: 24px auto;
     padding: 28px 22px 22px;
     background: #fff;
@@ -53,7 +32,6 @@ body {
     box-shadow: 0 2px 12px rgba(0,0,0,.06);
     text-align: center;
 }
-
 .icon-wrap {
     width: 60px;
     height: 60px;
@@ -65,63 +43,140 @@ body {
     background: #e8f0fe;
     color: #1a73e8;
 }
-
 .icon-wrap svg {
     width: 32px;
     height: 32px;
 }
-
 h1 {
     margin: 0 0 10px;
     font-size: 24px;
     line-height: 1.3;
     font-weight: 600;
 }
-
 .description {
     margin: 0 0 22px;
     color: #5f6368;
     font-size: 14px;
     line-height: 1.6;
 }
-
-button {
+.slider {
+    position: relative;
     width: 100%;
-    min-height: 50px;
-    padding: 13px 12px;
-    border: 0;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: 600;
-    overflow-wrap: anywhere;
+    height: 56px;
+    padding: 5px;
+    border-radius: 10px;
+    background: #e8f0fe;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: pan-y;
 }
-
-.btn-verifikasi {
+.slider-text {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 9px;
+    padding: 0 55px;
+    color: #1a73e8;
+    font-size: 14px;
+    font-weight: 600;
+    pointer-events: none;
+    white-space: nowrap;
+    transition: opacity .2s;
+}
+.slider-handle {
+    position: absolute;
+    z-index: 2;
+    top: 5px;
+    left: 5px;
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 7px;
     background: #1a73e8;
     color: #fff;
-    cursor: pointer;
-    transition: background .2s;
+    cursor: grab;
+    touch-action: none;
+    padding: 0;
 }
-
-.btn-verifikasi:hover:not(:disabled) {
-    background: #1765cc;
+.slider-handle:active {
+    cursor: grabbing;
 }
-
-.btn-verifikasi svg {
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
+.slider-handle svg {
+    width: 23px;
+    height: 23px;
+    pointer-events: none;
 }
-
-.btn-verifikasi:disabled {
+.slider.completed {
+    background: #e6f4ea;
+}
+.slider.completed .slider-text {
+    color: #188038;
+}
+.slider.completed .slider-handle {
+    background: #188038;
     cursor: default;
-    opacity: .9;
 }
-
+.slider.disabled {
+    pointer-events: none;
+}
+.loading {
+    display: none;
+    margin-top: 16px;
+    padding: 17px 12px;
+    background: #f8f9fa;
+    border: 1px solid #e8eaed;
+    border-radius: 10px;
+}
+.loading.active {
+    display: block;
+}
+.spinner {
+    width: 32px;
+    height: 32px;
+    margin: 0 auto 12px;
+    border: 3px solid #d2e3fc;
+    border-top-color: #1a73e8;
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+}
+.loading-text {
+    color: #202124;
+    font-size: 14px;
+    font-weight: 600;
+}
+.loading-subtext {
+    margin-top: 6px;
+    color: #5f6368;
+    font-size: 12px;
+    line-height: 1.5;
+}
+.progress-track {
+    width: 100%;
+    height: 4px;
+    margin-top: 14px;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #e8eaed;
+}
+.progress-bar {
+    width: 0;
+    height: 100%;
+    background: #1a73e8;
+}
+.progress-bar.animate {
+    width: 100%;
+    transition: width 4s linear;
+}
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
 .success {
     display: none;
     margin-top: 14px;
@@ -132,325 +187,377 @@ button {
     font-size: 14px;
     line-height: 1.5;
 }
-
 .card.verified .success {
     display: block;
 }
-
 .card.verified .icon-wrap {
     background: #e6f4ea;
     color: #188038;
 }
-
-.card.verified .btn-verifikasi {
-    background: #188038;
-}
-
-.ad-label {
-    margin: 24px 0 10px;
-    color: #80868b;
-    font-size: 10px;
-    letter-spacing: 1.2px;
-}
-
 .ad-slot {
-    display: block;
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    min-width: 0;
-    min-height: 50px;
-    margin: 0 auto;
-    text-align: center;
+    max-width: 100%;
+    margin: 20px auto 0;
     overflow: hidden;
-    background: #fff;
+    text-align: center;
     isolation: isolate;
 }
-
-.ad-slot iframe {
-    display: block;
-    max-width: 100% !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+.ad-slot-display {
+    min-height: 50px;
 }
-
-/* Loading verifikasi */
-.loading {
-    display: none;
-    margin-top: 16px;
-    padding: 17px 12px;
-    background: #f8f9fa;
-    border: 1px solid #e8eaed;
-    border-radius: 10px;
+.ad-slot-banner {
+    min-height: 50px;
 }
-
-.loading.active {
-    display: block;
+.ad-slot iframe,
+.ad-slot img {
+    max-width: 100%;
 }
-
-.spinner {
-    width: 32px;
-    height: 32px;
-    margin: 0 auto 12px;
-    border: 3px solid #d2e3fc;
-    border-top-color: #1a73e8;
-    border-radius: 50%;
-    animation: spin .8s linear infinite;
-}
-
-.loading-text {
-    color: #202124;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.loading-subtext {
-    margin-top: 6px;
-    color: #5f6368;
-    font-size: 12px;
-    line-height: 1.5;
-}
-
-.progress-track {
-    width: 100%;
-    height: 4px;
-    margin-top: 14px;
-    overflow: hidden;
-    border-radius: 10px;
-    background: #e8eaed;
-}
-
-.progress-bar {
-    width: 0;
-    height: 100%;
-    background: #1a73e8;
-}
-
-.progress-bar.animate {
-    width: 100%;
-    transition: width 4s linear;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 .btn-lanjut {
+    width: 100%;
+    min-height: 50px;
     margin-top: 20px;
+    padding: 13px 12px;
+    border: 0;
+    border-radius: 8px;
     background: #e8eaed;
     color: #80868b;
+    font-size: 15px;
+    font-weight: 600;
     cursor: not-allowed;
 }
-
 .btn-lanjut:disabled {
     opacity: 1;
 }
-
 .card.verified .btn-lanjut {
     background: #1a73e8;
     color: #fff;
     cursor: pointer;
 }
-
 .card.verified .btn-lanjut:hover {
     background: #1765cc;
 }
-
 .hint {
     margin: 14px 0 0;
     color: #80868b;
     font-size: 12px;
     line-height: 1.6;
 }
-
-button:focus-visible {
+button:focus-visible,
+.slider-handle:focus-visible {
     outline: 3px solid #aecbfa;
     outline-offset: 3px;
 }
-
 @media (max-width: 360px) {
     body {
         padding: 12px 8px;
     }
-
     .card {
         margin: 12px auto;
         padding: 24px 16px 20px;
     }
-
     h1 {
         font-size: 22px;
     }
 }
-
 @media (prefers-reduced-motion: reduce) {
     .spinner {
         animation-duration: 1.6s;
     }
+    .progress-bar.animate {
+        transition-duration: 4s;
+    }
 }
-</style>
-</head>
-
-<body>
-
-<main class="card" id="verificationCard">
-
-    <div class="icon-wrap" id="iconWrap">
+</style></head><body><main class="card" id="verificationCard"><div class="icon-wrap" id="iconWrap">
+    <svg viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="1.8"
+         stroke-linecap="round" stroke-linejoin="round"
+         aria-hidden="true">
+        <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/>
+        <path d="m9 12 2 2 4-4"/>
+    </svg>
+</div>
+<h1 id="heading">Satu langkah lagi!</h1>
+<p class="description" id="description">
+    Geser tombol ke kanan untuk melanjutkan
+    ke konten yang kamu cari.
+</p>
+<div class="slider" id="slider">
+    <div class="slider-text" id="sliderText">
+        Geser untuk verifikasi
+    </div>
+    <button class="slider-handle" id="sliderHandle"
+            type="button"
+            aria-label="Geser ke kanan untuk verifikasi"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0">
         <svg viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="1.8"
+             stroke="currentColor" stroke-width="2.5"
              stroke-linecap="round" stroke-linejoin="round"
              aria-hidden="true">
-            <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/>
-            <path d="m9 12 2 2 4-4"/>
+            <path d="m9 18 6-6-6-6"/>
         </svg>
-    </div>
-
-    <h1 id="heading">Satu langkah lagi!</h1>
-
-    <p class="description" id="description">
-        Klik tombol di bawah untuk melanjutkan ke konten
-        yang kamu cari. Prosesnya cepat dan mudah.
-    </p>
-
-    <button class="btn-verifikasi" id="btnVerifikasi"
-            type="button" onclick="verifikasi()">
-        <svg viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2"
-             stroke-linecap="round" stroke-linejoin="round"
-             aria-hidden="true">
-            <path d="m5 12 4 4L19 6"/>
-        </svg>
-        <span id="verificationText">Lanjutkan Verifikasi</span>
     </button>
-
-    <!-- Panel loading -->
-    <div class="loading" id="loadingBox"
-         role="status" aria-live="polite">
-
-        <div class="spinner"></div>
-
-        <div class="loading-text" id="loadingText">
-            Memproses verifikasi...
-        </div>
-
-        <div class="loading-subtext" id="loadingSubtext">
-            Mohon tunggu sebentar.
-        </div>
-
-        <div class="progress-track">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
+</div>
+<div class="loading" id="loadingBox"
+     role="status" aria-live="polite">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loadingText">
+        Memproses verifikasi...
     </div>
-
-    <!-- Pesan berhasil -->
-    <div class="success" id="successMessage" role="status">
-        ✓ Verifikasi berhasil! Silakan lanjutkan.
+    <div class="loading-subtext" id="loadingSubtext">
+        Mohon tunggu sebentar.
     </div>
-
-    <p class="ad-label">ADVERTISEMENT</p>
-
-    <!-- Wadah iklan -->
-    <div class="ad-slot"
-         id="container-d4d647d760fe055702fad1911bf39c35"></div>
-
-    <!-- Banner iklan 320x50 -->
-    <div class="ad-slot" id="banner-ad">
-        <script>
-            var atOptions = {
-                key: '958e87a6c812dee324d395a6b5845e50',
-                format: 'iframe',
-                height: 50,
-                width: 320,
-                params: {}
-            };
-        </script>
-        <script
-            src="https://bancadeltempoidea.org/22/958e87a6c812dee324d395a6b5845e50">
-        </script>
+    <div class="progress-track">
+        <div class="progress-bar" id="progressBar"></div>
     </div>
-
-    <button class="btn-lanjut" id="btnLanjut"
-            type="button" disabled onclick="lanjutkan()">
-        Lanjutkan →
-    </button>
-
-    <p class="hint">
-        Cukup satu klik untuk melanjutkan ke halaman berikutnya.
-    </p>
-
-</main>
-
-<script>
+</div>
+<div class="success" id="successMessage" role="status">
+    ✓ Verifikasi berhasil! Silakan lanjutkan.
+</div>
+<div class="ad-slot ad-slot-display" id="ad-display">
+    <script async="async" data-cfasync="false"
+        src="https://bancadeltempoidea.org/21/d4d647d760fe055702fad1911bf39c35"></script>
+    <div id="container-d4d647d760fe055702fad1911bf39c35"></div>
+</div>
+<div class="ad-slot ad-slot-banner" id="ad-banner">
+    <script>
+        var atOptions = {
+            'key': '958e87a6c812dee324d395a6b5845e50',
+            'format': 'iframe',
+            'height': 50,
+            'width': 320,
+            'params': {}
+        };
+    </script>
+    <script data-cfasync="false"
+        src="https://bancadeltempoidea.org/22/958e87a6c812dee324d395a6b5845e50"></script>
+</div>
+<button class="btn-lanjut" id="btnLanjut"
+        type="button" disabled>
+    Lanjutkan →
+</button>
+<p class="hint" id="hint">
+    Geser sampai ujung kanan untuk menyelesaikan langkah ini.
+</p>
+</main><script>
 const card = document.getElementById('verificationCard');
-const btnVerifikasi = document.getElementById('btnVerifikasi');
-const verificationText = document.getElementById('verificationText');
+const slider = document.getElementById('slider');
+const sliderHandle = document.getElementById('sliderHandle');
+const sliderText = document.getElementById('sliderText');
 const btnLanjut = document.getElementById('btnLanjut');
 const heading = document.getElementById('heading');
 const description = document.getElementById('description');
-
+const hint = document.getElementById('hint');
 const loadingBox = document.getElementById('loadingBox');
 const loadingText = document.getElementById('loadingText');
 const loadingSubtext = document.getElementById('loadingSubtext');
 const progressBar = document.getElementById('progressBar');
 
+const DIRECT_AD_URL = 'https://directyp.org/4/32cb186a62b11cdfe1e8515297fe6a55';
+
 let verified = false;
 let processing = false;
+let dragging = false;
+let startX = 0;
+let startLeft = 5;
+let maxLeft = 5;
+
+function updateSliderBounds() {
+    maxLeft = Math.max(
+        5,
+        slider.clientWidth - sliderHandle.offsetWidth - 5
+    );
+    if (verified) {
+        sliderHandle.style.left = maxLeft + 'px';
+    }
+}
+
+function setHandlePosition(left) {
+    updateSliderBounds();
+    left = Math.max(5, Math.min(left, maxLeft));
+    sliderHandle.style.left = left + 'px';
+    const range = maxLeft - 5;
+    const progress = range > 0
+        ? Math.round(((left - 5) / range) * 100)
+        : 0;
+    sliderHandle.setAttribute('aria-valuenow', progress);
+    return progress;
+}
+
+function startDrag(event) {
+    if (verified || processing || dragging) return;
+    if (event.pointerType === 'mouse' && event.button !== 0) {
+        return;
+    }
+    updateSliderBounds();
+    dragging = true;
+    startX = event.clientX;
+    startLeft = sliderHandle.offsetLeft;
+    sliderHandle.setPointerCapture(event.pointerId);
+    event.preventDefault();
+}
+
+function moveDrag(event) {
+    if (!dragging || verified || processing) return;
+    const deltaX = event.clientX - startX;
+    const progress = setHandlePosition(startLeft + deltaX);
+    if (progress >= 100) {
+        finishDrag();
+    }
+}
+
+function endDrag() {
+    if (!dragging) return;
+    dragging = false;
+    if (!verified && !processing) {
+        sliderHandle.style.left = '5px';
+        sliderHandle.setAttribute('aria-valuenow', '0');
+    }
+}
+
+function finishDrag() {
+    if (verified || processing) return;
+    updateSliderBounds();
+    setHandlePosition(maxLeft);
+    dragging = false;
+    processing = true;
+    slider.classList.add('completed', 'disabled');
+    sliderText.textContent = '✓ Geser berhasil!';
+    sliderHandle.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.5"
+             stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true">
+            <path d="m5 12 4 4 8-8"/>
+        </svg>
+    `;
+    sliderHandle.setAttribute('aria-label', 'Verifikasi sedang diproses');
+    verifikasi();
+}
+
+sliderHandle.addEventListener('pointerdown', startDrag);
+sliderHandle.addEventListener('pointermove', moveDrag);
+sliderHandle.addEventListener('pointerup', endDrag);
+sliderHandle.addEventListener('pointercancel', endDrag);
+sliderHandle.addEventListener('keydown', function(event) {
+    if (verified || processing) return;
+    if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        const progress = setHandlePosition(sliderHandle.offsetLeft + 12);
+        if (progress >= 100) {
+            finishDrag();
+        }
+    }
+    if (event.key === 'Home') {
+        event.preventDefault();
+        setHandlePosition(5);
+    }
+    if (event.key === 'End') {
+        event.preventDefault();
+        finishDrag();
+    }
+});
+
+window.addEventListener('resize', updateSliderBounds);
 
 function verifikasi() {
-    if (verified || processing) return;
-
-    processing = true;
-
-    btnVerifikasi.disabled = true;
+    if (verified || !processing) return;
     btnLanjut.disabled = true;
-
-    verificationText.textContent = 'Sedang Memverifikasi...';
     heading.textContent = 'Memeriksa permintaan';
-    description.textContent =
-        'Mohon tunggu sebentar sampai proses selesai.';
-
+    description.textContent = 'Mohon tunggu sebentar sampai proses selesai.';
+    hint.textContent = 'Proses sedang berlangsung...';
     loadingBox.classList.add('active');
     loadingText.textContent = 'Memproses verifikasi...';
     loadingSubtext.textContent = 'Mohon tunggu sebentar.';
     progressBar.classList.remove('animate');
     progressBar.style.width = '0%';
-
-    // Memulai animasi setelah browser menggambar panel loading.
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
             progressBar.classList.add('animate');
         });
     });
-
-    // Simulasi proses selama 4 detik.
-    // Ini bukan pemeriksaan keamanan sungguhan.
     setTimeout(() => {
         verified = true;
         processing = false;
-
+        try {
+            sessionStorage.setItem('indexVerified', 'true');
+        } catch (_) {}
         card.classList.add('verified');
-
         loadingBox.classList.remove('active');
         progressBar.classList.remove('animate');
-
         heading.textContent = 'Verifikasi berhasil!';
-        description.textContent =
-            'Selesai! Sekarang kamu bisa melanjutkan ke konten.';
-
-        verificationText.textContent = 'Terverifikasi ✓';
-
-        btnVerifikasi.disabled = true;
+        description.textContent = 'Selesai! Sekarang kamu bisa melanjutkan ke konten.';
+        sliderText.textContent = '✓ Terverifikasi';
+        hint.textContent = 'Kamu sekarang bisa melanjutkan.';
+        sliderHandle.setAttribute('aria-label', 'Verifikasi berhasil');
         btnLanjut.disabled = false;
     }, 4000);
 }
 
-function lanjutkan() {
+btnLanjut.addEventListener('click', function() {
     if (!verified || processing) return;
-
+    
+    // Cek apakah iklan sudah pernah ditampilkan di sesi ini
+    let adAlreadyShown = false;
+    try {
+        adAlreadyShown = sessionStorage.getItem('indexDirectAdShown') === 'true';
+    } catch (_) {}
+    
+    if (!adAlreadyShown) {
+        // Tandai dulu sebelum membuka, supaya tidak terbuka berulang kali
+        try {
+            sessionStorage.setItem('indexDirectAdShown', 'true');
+        } catch (_) {}
+        // Buka iklan satu kali saja
+        const adWindow = window.open(DIRECT_AD_URL, '_blank', 'noopener');
+        if (adWindow) {
+            try { adWindow.opener = null; } catch (_) {}
+        }
+    }
+    
+    // Selalu lanjut ke halaman tujuan, iklan tidak menghalangi
     window.location.href = 'Pilihvid.html';
-}
-</script>
+});
 
-</body>
+function restoreVerificationIfNeeded() {
+    let alreadyVerified = false;
+    try {
+        alreadyVerified = sessionStorage.getItem('indexVerified') === 'true';
+    } catch (_) {}
+    if (!alreadyVerified) {
+        updateSliderBounds();
+        return;
+    }
+    verified = true;
+    processing = false;
+    dragging = false;
+    card.classList.add('verified');
+    slider.classList.add('completed', 'disabled');
+    loadingBox.classList.remove('active');
+    progressBar.classList.remove('animate');
+    progressBar.style.width = '100%';
+    heading.textContent = 'Verifikasi berhasil!';
+    description.textContent = 'Kamu sudah terverifikasi. Klik lanjutkan untuk membuka konten.';
+    sliderText.textContent = '✓ Terverifikasi';
+    hint.textContent = 'Verifikasi tidak perlu diulang selama sesi browser ini.';
+    updateSliderBounds();
+    sliderHandle.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.5"
+             stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true">
+            <path d="m5 12 4 4 8-8"/>
+        </svg>
+    `;
+    sliderHandle.setAttribute('aria-valuenow', '100');
+    sliderHandle.setAttribute('aria-label', 'Verifikasi berhasil');
+    btnLanjut.disabled = false;
+}
+
+restoreVerificationIfNeeded();
+</script></body>
 </html>
