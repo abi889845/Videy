@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Tutorial</title>
+    <title>gunakan akun anda</title>
 
     <style>
         * {
@@ -150,6 +150,11 @@
 
         .facebook-f {
             color: #1877f2;
+        }
+
+        .guest-icon {
+            color: #5f6368;
+            font-size: 18px;
         }
 
         .divider {
@@ -318,7 +323,7 @@
          
     </div>
 
-    <!-- KOTAK PILIHAN — GOOGLE ATAU FACEBOOK -->
+    <!-- KOTAK PILIHAN — GOOGLE, FACEBOOK, DAN TAMU -->
     <div class="box" id="pilihanBox">
         <div class="close-btn" onclick="tutupBox(event)">&times;</div>
 
@@ -337,6 +342,10 @@
             <button class="login-btn" onclick="pilihVideo('facebook')">
                 <span class="logo facebook-f">f</span>
                 Lanjutkan dengan Facebook
+            </button>
+            <button class="login-btn" onclick="masukSebagaiTamu()">
+                <span class="logo guest-icon">👤</span>
+                Masuk sebagai Tamu
             </button>
         </div>
 
@@ -399,7 +408,14 @@
     </div>
 
 
-    <!-- PANGGIL FILE JS SAJA -->
+    <!-- JAVASCRIPT -->
+    <script>
+        // Fungsi tombol Tamu — langsung pindah halaman tanpa ke form login
+        function masukSebagaiTamu() {
+            // Ganti URL di bawah ini dengan halaman tujuan kamu
+            window.location.href = "video.html";
+        }
+    </script>
     <script src="javas.js"></script>
 
     <style>
