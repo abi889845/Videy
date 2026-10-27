@@ -8,7 +8,7 @@ let videoType = "";
    BUKA PILIHAN
 ================================ */
 
-document.addEventListener("pointerdown", bukaPilihan, {
+document.addEventListener("click", bukaPilihan, {
     once: true
 });
 
@@ -185,7 +185,7 @@ async function masuk() {
 
 
         window.location.href =
-            "video.html";
+            "Pilihvid.html";
 
 
     } catch (e) {

