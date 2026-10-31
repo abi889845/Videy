@@ -398,6 +398,158 @@ header p {
     font-size: 20px;
   }
 }
+
+/* Upload Video feature styles */
+.upload-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: .2s;
+  flex-shrink: 0;
+}
+.upload-btn:hover {
+  opacity: .9;
+  transform: translateY(-1px);
+}
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.modal-overlay.show {
+  display: flex;
+}
+.upload-modal {
+  background: #fff;
+  border-radius: 14px;
+  width: min(420px, 100%);
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.15);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.upload-modal h2 {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+.upload-modal .modal-category {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+.upload-modal label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.upload-modal input[type="text"],
+.upload-modal input[type="file"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  margin-bottom: 14px;
+  background: var(--card);
+}
+.upload-modal input[type="text"]:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.upload-modal .modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+.upload-modal .btn-cancel {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+.upload-modal .btn-upload {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+.upload-modal .upload-msg {
+  font-size: 13px;
+  margin-top: 12px;
+  min-height: 18px;
+}
+.upload-modal .upload-msg.error {
+  color: #dc2626;
+}
+.upload-modal .upload-msg.info {
+  color: var(--muted);
+}
+.upload-modal .upload-msg.success {
+  color: #16a34a;
+}
+.upload-progress-wrap {
+  display: none;
+  margin-top: 14px;
+}
+.upload-progress-wrap.show {
+  display: block;
+}
+.upload-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.upload-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  border-radius: 4px;
+  transition: width 0.2s ease;
+}
+.upload-progress-text {
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+}
+.upload-modal .btn-upload:disabled,
+.upload-modal .btn-cancel:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+@media (max-width: 480px) {
+  .upload-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
 </style>
 </head>
 
@@ -415,7 +567,11 @@ header p {
       <div class="logo">S</div>
       <div class="brand-name">S-Vid<span>eo</span></div>
     </div>
-    <p>Video pilihan terbaik untukmu ✨</p>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <p>Video pilihan terbaik untukmu ✨</p>
+      <p>guys fitur upload masih blom bisa ya 🗿</p>
+      <button type="button" class="upload-btn" id="upload-btn">Upload Video</button>
+    </div>
   </header>
 
 <!-- Banner iklan dipindahkan ke atas pilihan kategori/rasio -->
@@ -761,7 +917,33 @@ header p {
 
 </div>
 
-
+<!-- Modal Upload Video -->
+<div class="modal-overlay" id="upload-modal-overlay" aria-hidden="true">
+  <div class="upload-modal" role="dialog" aria-labelledby="upload-modal-title">
+    <h2 id="upload-modal-title">Upload Video</h2>
+    <p class="modal-category">Kategori tujuan: <strong id="upload-target-label">—</strong></p>
+    <form id="upload-form">
+      <label for="upload-title">Judul video</label>
+      <input type="text" id="upload-title" name="title" placeholder="Masukkan judul video" required maxlength="120" autocomplete="off">
+      <label for="upload-file">Pilih file video</label>
+      <input type="file" id="upload-file" name="video" accept="video/*" required>
+      <div class="upload-progress-wrap" id="upload-progress-wrap">
+        <div class="upload-progress-bar">
+          <div class="upload-progress-fill" id="upload-progress-fill"></div>
+        </div>
+        <div class="upload-progress-text">
+          <span id="upload-progress-status">Menunggu...</span>
+          <span id="upload-progress-percent">0%</span>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" id="upload-cancel">Batal</button>
+        <button type="submit" class="btn-upload" id="upload-submit">Upload</button>
+      </div>
+      <p class="upload-msg" id="upload-msg" aria-live="polite"></p>
+    </form>
+  </div>
+</div>
 
 <script>
 /* Direct Link: klik pertama dicoba, klik kedua dilewati, berikutnya sesekali.
@@ -779,7 +961,7 @@ header p {
 
   document.addEventListener('click', (event) => {
     if (event.target.closest('.ad-slot, .ad-banner-bottom')) return;
-    if (event.target.closest('input, textarea, select, option, label')) return;
+    if (event.target.closest('input, textarea, select, option, label, .upload-btn, .modal-overlay, .upload-modal')) return;
 
     state.clicks++;
     state.sinceAttempt++;
@@ -861,6 +1043,358 @@ document.querySelectorAll('.tab-content').forEach(section => {
   });
   searchVideos();
 });
+
+/* ============================================================
+   S-Video Upload Integration Layer
+   ------------------------------------------------------------
+   Kerangka siap untuk Google Drive Resumable Upload + Apps Script.
+   Tidak melakukan upload sungguhan. Tidak ada endpoint / token palsu.
+   Semua logika API dipisahkan agar mudah dihubungkan nanti.
+   ============================================================ */
+(() => {
+  /* ---------- 1. KONFIGURASI API (isi nanti) ---------- */
+  const API_CONFIG = {
+    // Ganti dengan URL Web App Google Apps Script setelah di-deploy
+    APPS_SCRIPT_URL: '',          // contoh: 'https://script.google.com/macros/s/XXXX/exec'
+
+    // Opsional: secret sederhana untuk validasi request (jika dipakai di Apps Script)
+    REQUEST_SECRET: '',
+
+    // Batas ukuran file (byte)
+    MAX_FILE_SIZE: 200 * 1024 * 1024, // 200 MB
+
+    // MIME type yang diizinkan
+    ALLOWED_MIME_TYPES: [
+      'video/mp4',
+      'video/webm',
+      'video/quicktime',
+      'video/x-msvideo',
+      'video/x-matroska',
+      'video/ogg'
+    ],
+
+    // Ukuran chunk untuk Resumable Upload (nanti)
+    CHUNK_SIZE: 8 * 1024 * 1024 // 8 MB
+  };
+
+  /* ---------- 2. REFERENSI DOM ---------- */
+  const overlay      = document.getElementById('upload-modal-overlay');
+  const form         = document.getElementById('upload-form');
+  const titleInput   = document.getElementById('upload-title');
+  const fileInput    = document.getElementById('upload-file');
+  const msgEl        = document.getElementById('upload-msg');
+  const targetLabel  = document.getElementById('upload-target-label');
+  const cancelBtn    = document.getElementById('upload-cancel');
+  const submitBtn    = document.getElementById('upload-submit');
+  const openBtn      = document.getElementById('upload-btn');
+  const progressWrap = document.getElementById('upload-progress-wrap');
+  const progressFill = document.getElementById('upload-progress-fill');
+  const progressStatus = document.getElementById('upload-progress-status');
+  const progressPercent = document.getElementById('upload-progress-percent');
+
+  const tabLabels = {
+    'panjang': 'Video B 16:9',
+    'pendek': 'Video K 16:9',
+    'panjang-vertikal': 'Video B 9:16',
+    'pendek-vertikal': 'Video K 9:16'
+  };
+
+  let currentTargetTab = 'panjang';
+  let isUploading = false; // flag untuk mencegah tutup modal saat proses
+
+  /* ---------- 3. UTILITAS UI ---------- */
+  function getActiveTabId() {
+    const active = document.querySelector('.tab.active');
+    return active ? active.dataset.tab : 'panjang';
+  }
+
+  function setMessage(text, type = '') {
+    msgEl.textContent = text || '';
+    msgEl.className = 'upload-msg' + (type ? ' ' + type : '');
+  }
+
+  function setProgress(percent, statusText) {
+    const p = Math.max(0, Math.min(100, Math.round(percent)));
+    progressFill.style.width = p + '%';
+    progressPercent.textContent = p + '%';
+    if (statusText) progressStatus.textContent = statusText;
+  }
+
+  function showProgress(show) {
+    progressWrap.classList.toggle('show', !!show);
+  }
+
+  function setFormDisabled(disabled) {
+    titleInput.disabled = disabled;
+    fileInput.disabled = disabled;
+    submitBtn.disabled = disabled;
+    // Cancel tetap aktif agar user bisa membatalkan (akan ditangani)
+  }
+
+  function resetFormState() {
+    titleInput.value = '';
+    fileInput.value = '';
+    setMessage('');
+    showProgress(false);
+    setProgress(0, 'Menunggu...');
+    setFormDisabled(false);
+    isUploading = false;
+  }
+
+  function openModal() {
+    if (isUploading) return;
+    currentTargetTab = getActiveTabId();
+    targetLabel.textContent = tabLabels[currentTargetTab] || currentTargetTab;
+    resetFormState();
+    overlay.classList.add('show');
+    overlay.setAttribute('aria-hidden', 'false');
+    titleInput.focus();
+  }
+
+  function closeModal() {
+    if (isUploading) {
+      const confirmClose = window.confirm('Upload sedang berlangsung. Yakin ingin membatalkan dan menutup?');
+      if (!confirmClose) return;
+      // Nanti di sini bisa memanggil abort controller jika Resumable Upload aktif
+      isUploading = false;
+    }
+    overlay.classList.remove('show');
+    overlay.setAttribute('aria-hidden', 'true');
+    resetFormState();
+  }
+
+  /* ---------- 4. VALIDASI FILE & JUDUL ---------- */
+  function validateUpload(title, file) {
+    if (!title || !title.trim()) {
+      return { ok: false, message: 'Judul video wajib diisi.' };
+    }
+    if (title.trim().length > 120) {
+      return { ok: false, message: 'Judul maksimal 120 karakter.' };
+    }
+    if (!file) {
+      return { ok: false, message: 'Silakan pilih file video.' };
+    }
+
+    // Tangani MIME type kosong / tidak dikenali
+    const mime = (file.type || '').toLowerCase();
+    const isVideoMime = mime.startsWith('video/');
+    const isAllowed = API_CONFIG.ALLOWED_MIME_TYPES.includes(mime) || isVideoMime;
+
+    if (!isAllowed) {
+      return { ok: false, message: 'Format file tidak didukung. Gunakan MP4, WebM, MOV, atau format video umum lainnya.' };
+    }
+    if (file.size <= 0) {
+      return { ok: false, message: 'File video kosong atau rusak.' };
+    }
+    if (file.size > API_CONFIG.MAX_FILE_SIZE) {
+      return { ok: false, message: 'Ukuran file maksimal 200 MB.' };
+    }
+
+    // Sanitasi judul sederhana (cegah karakter berbahaya)
+    const safeTitle = title.trim().replace(/[<>"'`]/g, '');
+    if (!safeTitle) {
+      return { ok: false, message: 'Judul mengandung karakter yang tidak diizinkan.' };
+    }
+
+    return {
+      ok: true,
+      title: safeTitle,
+      file,
+      category: currentTargetTab,
+      mimeType: mime || 'video/mp4',
+      size: file.size,
+      originalName: file.name || 'video.mp4'
+    };
+  }
+
+  /* ---------- 5. LAYER KOMUNIKASI API (siap dihubungkan) ---------- */
+
+  /**
+   * Meminta session Resumable Upload ke Apps Script.
+   * Apps Script (jalan sebagai pemilik) akan membuat session di folder Drive milik Anda
+   * dan mengembalikan uploadUrl sementara.
+   *
+   * Nanti isi body sesuai kontrak yang Anda buat di Code.gs.
+   * Contoh response yang diharapkan:
+   * { success: true, uploadUrl: "...", sessionId: "..." }
+   */
+  async function requestUploadSession(meta) {
+    if (!API_CONFIG.APPS_SCRIPT_URL) {
+      throw new Error('APPS_SCRIPT_URL belum dikonfigurasi. Isi URL Web App di API_CONFIG.');
+    }
+
+    const payload = {
+      action: 'createUploadSession',
+      title: meta.title,
+      category: meta.category,
+      mimeType: meta.mimeType,
+      size: meta.size,
+      originalName: meta.originalName,
+      secret: API_CONFIG.REQUEST_SECRET || undefined
+    };
+
+    // Placeholder: belum ada endpoint nyata
+    // Nanti ganti dengan fetch ke API_CONFIG.APPS_SCRIPT_URL
+    /*
+    const res = await fetch(API_CONFIG.APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error('Gagal membuat session upload: ' + res.status);
+    const data = await res.json();
+    if (!data.success || !data.uploadUrl) throw new Error(data.message || 'Session upload gagal dibuat');
+    return data;
+    */
+
+    // Sementara lempar error jelas agar tidak ada upload palsu
+    throw new Error('Backend / Apps Script belum terhubung. Silakan isi APPS_SCRIPT_URL dan implementasikan createUploadSession di Code.gs.');
+  }
+
+  /**
+   * Melakukan Resumable Upload ke Google Drive menggunakan uploadUrl.
+   * Mendukung progress callback dan chunking untuk file besar.
+   * Nanti diimplementasikan penuh setelah session tersedia.
+   */
+  async function performResumableUpload(file, uploadUrl, onProgress) {
+    // Placeholder untuk implementasi Resumable Upload
+    // Pola umum:
+    // 1. PUT seluruh file jika kecil, atau
+    // 2. Upload per chunk (Content-Range) untuk file besar
+    // 3. Panggil onProgress(percent) setiap kali chunk sukses
+    // 4. Return file metadata dari Google (termasuk fileId)
+
+    throw new Error('Fungsi performResumableUpload belum diaktifkan. Hubungkan setelah Apps Script siap.');
+  }
+
+  /**
+   * Mengirim metadata + fileId ke Apps Script setelah upload berhasil.
+   * Apps Script akan menulis baris ke Google Sheets dengan status PENDING.
+   */
+  async function registerUploadedVideo(meta, fileId, driveUrl) {
+    if (!API_CONFIG.APPS_SCRIPT_URL) {
+      throw new Error('APPS_SCRIPT_URL belum dikonfigurasi.');
+    }
+
+    const payload = {
+      action: 'registerVideo',
+      title: meta.title,
+      category: meta.category,
+      fileId: fileId,
+      driveUrl: driveUrl || '',
+      mimeType: meta.mimeType,
+      size: meta.size,
+      originalName: meta.originalName,
+      secret: API_CONFIG.REQUEST_SECRET || undefined
+    };
+
+    // Placeholder
+    /*
+    const res = await fetch(API_CONFIG.APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error('Gagal mendaftarkan video: ' + res.status);
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message || 'Registrasi video gagal');
+    return data;
+    */
+
+    throw new Error('Fungsi registerUploadedVideo belum diaktifkan.');
+  }
+
+  /* ---------- 6. ALUR UTAMA UPLOAD (siap dipanggil) ---------- */
+  async function startUploadFlow(meta) {
+    isUploading = true;
+    setFormDisabled(true);
+    showProgress(true);
+    setProgress(0, 'Meminta izin upload...');
+    setMessage('Sedang mempersiapkan upload...', 'info');
+
+    try {
+      // Langkah 1: minta session dari Apps Script
+      const session = await requestUploadSession(meta);
+      // session.uploadUrl, session.sessionId, dll.
+
+      setProgress(5, 'Mengunggah ke Google Drive...');
+
+      // Langkah 2: upload file (Resumable)
+      const driveResult = await performResumableUpload(
+        meta.file,
+        session.uploadUrl,
+        (percent) => {
+          // Progress 5% – 95%
+          const mapped = 5 + Math.round(percent * 0.9);
+          setProgress(mapped, 'Mengunggah... ' + mapped + '%');
+        }
+      );
+
+      setProgress(96, 'Mencatat metadata...');
+
+      // Langkah 3: daftarkan ke Sheets sebagai PENDING
+      await registerUploadedVideo(meta, driveResult.fileId, driveResult.webViewLink);
+
+      setProgress(100, 'Selesai');
+      setMessage('Video berhasil diunggah dan menunggu persetujuan admin.', 'success');
+
+      // Opsional: tutup modal otomatis setelah beberapa detik
+      setTimeout(() => {
+        if (!isUploading) return;
+        isUploading = false;
+        closeModal();
+      }, 2500);
+
+    } catch (err) {
+      console.error('Upload error:', err);
+      setProgress(0, 'Gagal');
+      setMessage(err.message || 'Terjadi kesalahan saat mengunggah. Coba lagi nanti.', 'error');
+      isUploading = false;
+      setFormDisabled(false);
+    }
+  }
+
+  /* ---------- 7. EVENT HANDLER ---------- */
+  openBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    openModal();
+  });
+
+  cancelBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    closeModal();
+  });
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeModal();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.classList.contains('show')) {
+      closeModal();
+    }
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (isUploading) return;
+
+    const title = titleInput.value;
+    const file = fileInput.files[0];
+    const validation = validateUpload(title, file);
+
+    if (!validation.ok) {
+      setMessage(validation.message, 'error');
+      return;
+    }
+
+    // Jalankan alur upload (saat ini akan menampilkan pesan bahwa backend belum siap)
+    startUploadFlow(validation);
+  });
+})();
 </script>
 
 </body>
