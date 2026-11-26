@@ -31,6 +31,56 @@
       justify-content: space-between;
       padding: 0 7%;
       border-bottom: 1px solid #eee;
+      position: relative;
+      z-index: 100;
+      background: white;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    /* TOMBOL MENU */
+    .menu-button {
+      width: 38px;
+      height: 38px;
+      border: none;
+      background: transparent;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: background .2s;
+    }
+
+    .menu-button:hover {
+      background: #f1f3f4;
+    }
+
+    .menu-button span {
+      width: 19px;
+      height: 2px;
+      background: #5f6368;
+      border-radius: 5px;
+      transition: .2s;
+    }
+
+    /* ANIMASI MENU */
+    .menu-button.active span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .menu-button.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .menu-button.active span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
     }
 
     .logo {
@@ -46,6 +96,66 @@
     .header-label {
       color: #777;
       font-size: 13px;
+    }
+
+    /* MENU DROPDOWN */
+    .menu-dropdown {
+      position: absolute;
+      top: 57px;
+      left: 7%;
+      width: 230px;
+      background: white;
+      border: 1px solid #dadce0;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(60,64,67,.16);
+      padding: 8px;
+      display: none;
+      animation: menuShow .18s ease;
+    }
+
+    .menu-dropdown.show {
+      display: block;
+    }
+
+    @keyframes menuShow {
+      from {
+        opacity: 0;
+        transform: translateY(-7px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .menu-title {
+      padding: 10px 12px;
+      color: #80868b;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .7px;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      color: #3c4043;
+      font-size: 14px;
+      text-decoration: none;
+      transition: background .2s;
+    }
+
+    .menu-item:hover {
+      background: #f1f3f4;
+    }
+
+    .menu-item .menu-icon {
+      width: 22px;
+      text-align: center;
+      font-size: 17px;
     }
 
     main {
@@ -124,6 +234,10 @@
       background: #e6f4ea;
     }
 
+    .private-icon {
+      background: #fce8e6;
+    }
+
     .choice h2 {
       font-size: 21px;
       margin-bottom: 10px;
@@ -165,6 +279,15 @@
 
     .btn-photo:hover {
       background: #137333;
+    }
+
+    .btn-private {
+      background: #c5221f;
+      color: white;
+    }
+
+    .btn-private:hover {
+      background: #a50e0e;
     }
 
     .note {
@@ -223,6 +346,14 @@
     }
 
     @media (max-width: 600px) {
+      header {
+        padding: 0 5%;
+      }
+
+      .menu-dropdown {
+        left: 5%;
+      }
+
       main {
         padding: 55px 20px;
       }
@@ -252,8 +383,44 @@
 <body>
 
   <header>
-    <div class="logo">Media<span>Hub</span></div>
+
+    <div class="header-left">
+
+      <!-- TOMBOL MENU -->
+      <button
+        class="menu-button"
+        id="menuButton"
+        aria-label="Buka menu"
+        aria-expanded="false"
+        aria-controls="menuDropdown"
+        onclick="toggleMenu()">
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </button>
+
+      <div class="logo">Media<span>Hub</span></div>
+
+    </div>
+
     <div class="header-label">Platform Media</div>
+
+    <!-- MENU NAVIGASI -->
+    <nav class="menu-dropdown" id="menuDropdown">
+
+      <div class="menu-title">MENU NAVIGASI</div>
+
+      <a href="tentang.html" class="menu-item">
+        <span class="menu-icon">ⓘ</span>
+        <span>Tentang</span>
+      </a>
+
+      <!-- OPSI MENU LAIN BISA DITAMBAHKAN DI SINI -->
+
+    </nav>
+
   </header>
 
   <main>
@@ -270,7 +437,7 @@
 
     <div class="choices">
 
-      <!-- JALUR A: VIDEO -->
+      <!-- KATEGORI VIDEO -->
       <section class="choice">
         <div class="icon video-icon">▶</div>
 
@@ -286,19 +453,34 @@
         </a>
       </section>
 
-      <!-- JALUR B: FOTO -->
+      <!-- KATEGORI FOTO NORMAL -->
       <section class="choice">
         <div class="icon photo-icon">▧</div>
 
         <h2>Foto</h2>
 
         <p>
-          Jelajahi koleksi foto dan lihat konten
-          yang tersedia.
+          Jelajahi koleksi foto umum yang tersedia
+          di platform.(bagian ini masih tahap pengembangan)
         </p>
 
-        <a href="indfot.html" class="btn btn-photo">
+        <a href="Pilihfot.html" class="btn btn-photo">
           Buka Foto →
+        </a>
+      </section>
+
+      <!-- KATEGORI FOTO PRIVATE -->
+      <section class="choice">
+        <div class="icon private-icon">🔒</div>
+
+        <h2>Foto Private</h2>
+
+        <p>
+          anda membutuhkan kode untuk bisa mengakses foto
+        </p>
+
+        <a href="indfot.html" class="btn btn-private">
+          Buka Foto Private →
         </a>
       </section>
 
@@ -325,7 +507,7 @@
         </script>
       </div>
 
-      <!-- IKLAN 3: DIRECT LINK -->
+      <!-- IKLAN 3 -->
       <div class="ad-slot" style="grid-column: 1 / -1;">
         <div class="ad-label">ADVERTISEMENT</div>
 
@@ -349,6 +531,41 @@
   <footer>
     © 2026 MediaHub. All rights reserved.
   </footer>
+
+  <script>
+    const menuButton = document.getElementById("menuButton");
+    const menuDropdown = document.getElementById("menuDropdown");
+
+    function toggleMenu() {
+      const isOpen = menuDropdown.classList.toggle("show");
+
+      menuButton.classList.toggle("active", isOpen);
+      menuButton.setAttribute("aria-expanded", isOpen);
+    }
+
+    // Tutup menu saat pengguna klik di luar menu
+    document.addEventListener("click", function(event) {
+      if (
+        !menuButton.contains(event.target) &&
+        !menuDropdown.contains(event.target)
+      ) {
+        closeMenu();
+      }
+    });
+
+    // Tutup menu dengan tombol Escape
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "Escape") {
+        closeMenu();
+      }
+    });
+
+    function closeMenu() {
+      menuDropdown.classList.remove("show");
+      menuButton.classList.remove("active");
+      menuButton.setAttribute("aria-expanded", "false");
+    }
+  </script>
 
 </body>
 </html>

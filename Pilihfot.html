@@ -1,0 +1,742 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000000">
+
+  <title>Foto - MediaHub</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      height: 68px;
+      padding: 0 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #fff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #000;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 21px;
+      font-weight: bold;
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .upload-button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 17px;
+      background: #fff;
+      color: #000;
+      border: 1px solid #fff;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .upload-button:hover {
+      background: #000;
+      color: #fff;
+    }
+
+    /* MAIN */
+    main {
+      width: min(1100px, 92%);
+      margin: auto;
+      padding: 45px 0 70px;
+    }
+
+    .heading {
+      margin-bottom: 30px;
+    }
+
+    .heading h1 {
+      font-size: clamp(28px, 5vw, 40px);
+      margin-bottom: 10px;
+      letter-spacing: -1px;
+    }
+
+    .heading p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #fff;
+    }
+
+    /* SEARCH */
+    .search-box {
+      margin-bottom: 25px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 14px 16px;
+      background: #000;
+      color: #fff;
+      border: 1px solid #fff;
+      border-radius: 9px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .search-box input::placeholder {
+      color: #fff;
+      opacity: 1;
+    }
+
+    .search-box input:focus {
+      border-width: 2px;
+    }
+
+    /* CATEGORY */
+    .categories {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      margin-bottom: 28px;
+    }
+
+    .category-button {
+      flex-shrink: 0;
+      padding: 10px 19px;
+      border: 1px solid #fff;
+      border-radius: 30px;
+      background: #000;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .category-button:hover,
+    .category-button.active {
+      background: #fff;
+      color: #000;
+    }
+
+    /* GALLERY */
+    .gallery {
+      columns: 4;
+      column-gap: 17px;
+    }
+
+    .photo-card {
+      display: inline-block;
+      width: 100%;
+      margin-bottom: 17px;
+      break-inside: avoid;
+      background: #000;
+      border: 1px solid #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .photo-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .photo-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      background: #000;
+    }
+
+    .photo-info {
+      padding: 12px;
+      border-top: 1px solid #fff;
+    }
+
+    .photo-info h3 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .photo-info span {
+      font-size: 11px;
+      color: #fff;
+    }
+
+    .empty-message {
+      display: none;
+      text-align: center;
+      padding: 50px 15px;
+      border: 1px solid #fff;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    /* MODAL FOTO */
+    .image-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: #000;
+      padding: 25px;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .image-modal.show {
+      display: flex;
+    }
+
+    .modal-image {
+      max-width: 95%;
+      max-height: 78vh;
+      object-fit: contain;
+    }
+
+    .modal-title {
+      margin-top: 15px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 18px;
+      right: 23px;
+      width: 42px;
+      height: 42px;
+      border: 1px solid #fff;
+      border-radius: 50%;
+      background: #000;
+      color: #fff;
+      font-size: 25px;
+      cursor: pointer;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid #fff;
+      padding: 23px 15px;
+      text-align: center;
+      font-size: 12px;
+      color: #fff;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 850px) {
+      .gallery {
+        columns: 3;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        height: 62px;
+        padding: 0 5%;
+      }
+
+      .brand-name {
+        font-size: 16px;
+      }
+
+      .upload-button {
+        padding: 9px 13px;
+        font-size: 12px;
+      }
+
+      main {
+        padding-top: 35px;
+      }
+
+      .gallery {
+        columns: 2;
+        column-gap: 12px;
+      }
+
+      .photo-card {
+        margin-bottom: 12px;
+      }
+
+      .photo-info {
+        padding: 10px;
+      }
+
+      .image-modal {
+        padding: 12px;
+      }
+    }
+
+    @media (max-width: 350px) {
+      .gallery {
+        columns: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+
+    <a href="index.html" class="brand">
+      <div class="logo">S</div>
+      <span class="brand-name">S-Foto</span>
+    </a>
+
+    <button
+      class="upload-button"
+      onclick="document.getElementById('photoInput').click()">
+      <span>＋</span>
+      <span>Upload</span>
+    </button>
+
+    <input
+      type="file"
+      id="photoInput"
+      accept="image/*"
+      multiple
+      hidden
+    >
+
+  </header>
+
+  <!-- KONTEN UTAMA -->
+  <main>
+
+    <section class="heading">
+      <h1>Galeri Foto</h1>
+      <p>
+        Jelajahi berbagai koleksi foto dan ilustrasi
+        yang tersedia di MediaHub.
+      </p>
+    </section>
+
+    <!-- PENCARIAN -->
+    <div class="search-box">
+      <input
+        type="search"
+        id="searchInput"
+        placeholder="Cari foto..."
+        autocomplete="off"
+      >
+    </div>
+
+    <!-- KATEGORI -->
+    <nav class="categories" aria-label="Kategori foto">
+
+      <button
+        class="category-button active"
+        data-category="all">
+        Semua
+      </button>
+
+      <button
+        class="category-button"
+        data-category="manusia">
+        Manusia
+      </button>
+
+      <button
+        class="category-button"
+        data-category="anime">
+        Anime
+      </button>
+
+    </nav>
+
+    <!-- GALERI -->
+    <section class="gallery" id="gallery">
+
+      <!-- FOTO MANUSIA -->
+      <article class="photo-card" data-category="manusia">
+        <img
+          src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=700"
+          alt="Portrait"
+          loading="lazy"
+        >
+        <div class="photo-info">
+          <h3>Portrait 01</h3>
+          <span>Manusia</span>
+        </div>
+      </article>
+
+      <article class="photo-card" data-category="manusia">
+        <img
+          src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=700"
+          alt="Portrait"
+          loading="lazy"
+        >
+        <div class="photo-info">
+          <h3>Portrait 02</h3>
+          <span>Manusia</span>
+        </div>
+      </article>
+
+      <article class="photo-card" data-category="manusia">
+        <img
+          src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=700"
+          alt="Portrait"
+          loading="lazy"
+        >
+        <div class="photo-info">
+          <h3>Portrait 03</h3>
+          <span>Manusia</span>
+        </div>
+      </article>
+
+      <article class="photo-card" data-category="manusia">
+        <img
+          src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=700"
+          alt="Portrait"
+          loading="lazy"
+        >
+        <div class="photo-info">
+          <h3>Portrait 04</h3>
+          <span>Manusia</span>
+        </div>
+      </article>
+
+      <article class="photo-card" data-category="manusia">
+        <img
+          src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=700"
+          alt="Portrait"
+          loading="lazy"
+        >
+        <div class="photo-info">
+          <h3>Portrait 05</h3>
+          <span>Manusia</span>
+        </div>
+      </article>
+
+      <article class="photo-card" data-category="manusia">
+        <img
+          src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=700"
+          alt="Portrait"
+          loading="lazy"
+        >
+        <div class="photo-info">
+          <h3>Portrait 06</h3>
+          <span>Manusia</span>
+        </div>
+      </article>
+
+      <!-- ILUSTRASI ANIME SEMENTARA -->
+      <article class="photo-card" data-category="anime">
+        <img
+          src="https://api.dicebear.com/9.x/adventurer/svg?seed=Akira"
+          alt="Ilustrasi karakter"
+          loading="lazy"
+        >
+        <div class="photo-info">
+          <h3>Anime Style 01</h3>
+          <span>Anime</span>
+        </div>
+      </article>
+
+      <article class="photo-card" data-category="anime">
+        <img
+          src="https://api.dicebear.com/9.x/adventurer/svg?seed=Yuki"
+          alt="Ilustrasi karakter"
+          loading="lazy"
+        >
+        <div class="photo-info">
+          <h3>Anime Style 02</h3>
+          <span>Anime</span>
+        </div>
+      </article>
+
+      <article class="photo-card" data-category="anime">
+        <img
+          src="https://api.dicebear.com/9.x/adventurer/svg?seed=Haruka"
+          alt="Ilustrasi karakter"
+          loading="lazy"
+        >
+        <div class="photo-info">
+          <h3>Anime Style 03</h3>
+          <span>Anime</span>
+        </div>
+      </article>
+
+      <article class="photo-card" data-category="anime">
+        <img
+          src="https://api.dicebear.com/9.x/adventurer/svg?seed=Ren"
+          alt="Ilustrasi karakter"
+          loading="lazy"
+        >
+        <div class="photo-info">
+          <h3>Anime Style 04</h3>
+          <span>Anime</span>
+        </div>
+      </article>
+
+      <article class="photo-card" data-category="anime">
+        <img
+          src="https://api.dicebear.com/9.x/adventurer/svg?seed=Sakura"
+          alt="Ilustrasi karakter"
+          loading="lazy"
+        >
+        <div class="photo-info">
+          <h3>Anime Style 05</h3>
+          <span>Anime</span>
+        </div>
+      </article>
+
+      <article class="photo-card" data-category="anime">
+        <img
+          src="https://api.dicebear.com/9.x/adventurer/svg?seed=Hikari"
+          alt="Ilustrasi karakter"
+          loading="lazy"
+        >
+        <div class="photo-info">
+          <h3>Anime Style 06</h3>
+          <span>Anime</span>
+        </div>
+      </article>
+
+    </section>
+
+    <div class="empty-message" id="emptyMessage">
+      Foto tidak ditemukan.
+    </div>
+
+  </main>
+
+  <!-- MODAL FOTO -->
+  <div class="image-modal" id="imageModal">
+
+    <button
+      class="close-modal"
+      id="closeModal"
+      aria-label="Tutup">
+      ×
+    </button>
+
+    <img
+      src=""
+      alt="Foto ukuran besar"
+      class="modal-image"
+      id="modalImage"
+    >
+
+    <div class="modal-title" id="modalTitle"></div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2026 MediaHub. All rights reserved.
+  </footer>
+
+  <script>
+
+    const gallery = document.getElementById("gallery");
+    const searchInput = document.getElementById("searchInput");
+    const categoryButtons = document.querySelectorAll(".category-button");
+    const emptyMessage = document.getElementById("emptyMessage");
+
+    let activeCategory = "all";
+
+    // FILTER KATEGORI
+    categoryButtons.forEach(button => {
+      button.addEventListener("click", () => {
+
+        categoryButtons.forEach(item => {
+          item.classList.remove("active");
+        });
+
+        button.classList.add("active");
+
+        activeCategory = button.dataset.category;
+
+        filterPhotos();
+
+      });
+    });
+
+    // PENCARIAN FOTO
+    searchInput.addEventListener("input", filterPhotos);
+
+    function filterPhotos() {
+
+      const keyword = searchInput.value.toLowerCase();
+      const cards = document.querySelectorAll(".photo-card");
+
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+
+        const category = card.dataset.category;
+        const title = card.querySelector("h3").textContent.toLowerCase();
+
+        const categoryMatch =
+          activeCategory === "all" ||
+          category === activeCategory;
+
+        const searchMatch =
+          title.includes(keyword) ||
+          category.includes(keyword);
+
+        if (categoryMatch && searchMatch) {
+          card.style.display = "inline-block";
+          visibleCount++;
+        } else {
+          card.style.display = "none";
+        }
+
+      });
+
+      emptyMessage.style.display =
+        visibleCount === 0 ? "block" : "none";
+    }
+
+    // MODAL FOTO
+    gallery.addEventListener("click", event => {
+
+      const card = event.target.closest(".photo-card");
+
+      if (!card) return;
+
+      const image = card.querySelector("img");
+      const title = card.querySelector("h3").textContent;
+
+      document.getElementById("modalImage").src = image.src;
+      document.getElementById("modalTitle").textContent = title;
+
+      document.getElementById("imageModal").classList.add("show");
+
+    });
+
+    function closeImageModal() {
+      document.getElementById("imageModal").classList.remove("show");
+      document.getElementById("modalImage").src = "";
+    }
+
+    document.getElementById("closeModal").addEventListener(
+      "click",
+      closeImageModal
+    );
+
+    document.getElementById("imageModal").addEventListener(
+      "click",
+      event => {
+        if (event.target.id === "imageModal") {
+          closeImageModal();
+        }
+      }
+    );
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        closeImageModal();
+      }
+    });
+
+    // UPLOAD FOTO SEMENTARA
+    const photoInput = document.getElementById("photoInput");
+
+    photoInput.addEventListener("change", event => {
+
+      const files = Array.from(event.target.files);
+
+      files.forEach(file => {
+
+        if (!file.type.startsWith("image/")) {
+          alert("File harus berupa gambar.");
+          return;
+        }
+
+        if (file.size > 8 * 1024 * 1024) {
+          alert("Ukuran setiap foto maksimal 8 MB.");
+          return;
+        }
+
+        const imageURL = URL.createObjectURL(file);
+
+        const category =
+          activeCategory === "anime" ? "anime" : "manusia";
+
+        const card = document.createElement("article");
+        card.className = "photo-card";
+        card.dataset.category = category;
+
+        const image = document.createElement("img");
+        image.src = imageURL;
+        image.alt = file.name;
+        image.loading = "lazy";
+
+        const info = document.createElement("div");
+        info.className = "photo-info";
+
+        const title = document.createElement("h3");
+        title.textContent = file.name;
+
+        const label = document.createElement("span");
+        label.textContent =
+          category === "anime" ? "Anime" : "Manusia";
+
+        info.appendChild(title);
+        info.appendChild(label);
+
+        card.appendChild(image);
+        card.appendChild(info);
+
+        gallery.prepend(card);
+
+      });
+
+      photoInput.value = "";
+      filterPhotos();
+
+      alert(
+        "Foto berhasil ditampilkan sementara di browser ini."
+      );
+
+    });
+
+  </script>
+
+</body>
+</html>
