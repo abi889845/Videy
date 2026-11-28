@@ -194,6 +194,7 @@ button.primary:disabled {
   font-size: 13px;
   min-height: 20px;
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .ad-area {
@@ -272,6 +273,52 @@ button.primary:disabled {
   color: white;
 }
 
+/* MEDIA */
+#mediaSection {
+  display: none;
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid rgba(85,230,255,.2);
+  border-radius: 16px;
+  background: rgba(5,9,18,.65);
+  text-align: center;
+}
+
+.media-icon {
+  font-size: 42px;
+  margin-bottom: 12px;
+}
+
+.media-title {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.media-description {
+  color: #8b9bb4;
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+.media-open-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg,#00b894,#009473);
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 800;
+  border: none;
+}
+
+.media-open-btn:hover {
+  filter: brightness(1.1);
+}
+
 .ad-link {
   color: #55e6ff;
   text-decoration: none;
@@ -327,7 +374,7 @@ button.primary:disabled {
 
 <div class="container" id="clientPanel">
 
-  <!-- IKLAN 1: PALING ATAS -->
+  <!-- IKLAN 1 -->
   <div class="ad-area">
     <div class="ad-label">ADVERTISEMENT</div>
     <div class="ad-content">
@@ -342,7 +389,7 @@ button.primary:disabled {
   <h1>Galeri Rahasia</h1>
 
   <p class="subtitle">
-    Masukkan kode akses 6 digit untuk membuka foto.
+    Masukkan kode akses 6 digit untuk membuka foto atau media.
   </p>
 
   <input
@@ -359,9 +406,9 @@ button.primary:disabled {
     <span id="buttonText">Dekripsi & Buka Foto</span>
   </button>
 
-  <p id="clientMessage"></p>
+  <p id="clientMessage" aria-live="polite"></p>
 
-  <!-- IKLAN 2: SETELAH TOMBOL -->
+  <!-- IKLAN 2 -->
   <div class="ad-area">
     <div class="ad-label">ADVERTISEMENT</div>
     <div class="ad-content">
@@ -389,7 +436,7 @@ button.primary:disabled {
       </button>
     </div>
 
-    <!-- IKLAN 3: SETELAH FOTO -->
+    <!-- IKLAN 3 -->
     <div class="ad-area" id="photoAd">
       <div class="ad-label">ADVERTISEMENT</div>
       <div class="ad-content" id="photoAdContent"></div>
@@ -397,7 +444,31 @@ button.primary:disabled {
 
   </div>
 
-  <!-- IKLAN 4: BANNER BAWAH -->
+  <!-- MEDIA -->
+  <div id="mediaSection">
+
+    <div class="media-icon">📁</div>
+
+    <div class="media-title">
+      Media berhasil ditemukan!
+    </div>
+
+    <p class="media-description">
+      Kode akses valid. Tekan tombol di bawah untuk membuka atau mengunduh media.
+    </p>
+
+    <a
+      id="mediaOpenButton"
+      class="media-open-btn"
+      href="#"
+      target="_blank"
+      rel="noopener noreferrer">
+      🔗 Buka Media
+    </a>
+
+  </div>
+
+  <!-- IKLAN 4 -->
   <div class="ad-area">
     <div class="ad-label">ADVERTISEMENT</div>
     <div class="ad-content">
@@ -416,7 +487,7 @@ button.primary:disabled {
     </div>
   </div>
 
-  <!-- IKLAN 5: DIRECT LINK -->
+  <!-- IKLAN 5 -->
   <div class="ad-area">
     <div class="ad-label">ADVERTISEMENT · SPONSOR</div>
     <a
@@ -437,22 +508,29 @@ button.primary:disabled {
 </div>
 
 <script>
+/* KONFIGURASI API */
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbznJTe8JZwQjYa_CWzNkH3xw3V-k6oAyOxmx1HK5x6O8nqTaze2vkphtDxp3K-sln1_/exec";
 
+/* ELEMEN */
 const accessCode = document.getElementById("accessCode");
 const openButton = document.getElementById("openButton");
 const buttonText = document.getElementById("buttonText");
 const loadingSpinner = document.getElementById("loadingSpinner");
 const clientMessage = document.getElementById("clientMessage");
+
 const photo = document.getElementById("photo");
 const photoSection = document.getElementById("photoSection");
 const photoAd = document.getElementById("photoAd");
 
+const mediaSection = document.getElementById("mediaSection");
+const mediaOpenButton = document.getElementById("mediaOpenButton");
+
 let currentPhoto = "";
 let photoAdLoaded = false;
+let requestNumber = 0;
 
-/* IKLAN SETELAH FOTO BERHASIL DIBUKA */
+/* TAMPILKAN IKLAN SETELAH FOTO BERHASIL DIBUKA */
 function loadPhotoAd() {
   if (photoAdLoaded) {
     photoAd.style.display = "block";
@@ -471,85 +549,189 @@ function loadPhotoAd() {
   document.getElementById("photoAdContent").appendChild(script);
 }
 
-/* TOMBOL BUKA FOTO */
-openButton.addEventListener("click", async () => {
-  const code = accessCode.value.trim();
-
-  if (!/^\d{6}$/.test(code)) {
-    clientMessage.style.color = "#ff6b6b";
-    clientMessage.textContent =
-      "⚠️ Masukkan tepat 6 digit angka.";
-    photoSection.style.display = "none";
-    return;
-  }
-
-  openButton.disabled = true;
-  buttonText.textContent = "Menghubungkan ke Server...";
-  loadingSpinner.style.display = "block";
-
-  clientMessage.textContent = "";
-  photoSection.style.display = "none";
-
-  try {
-    const response = await fetch(
-      `${SCRIPT_URL}?code=${encodeURIComponent(code)}`
-    );
-
-    if (!response.ok) {
-      throw new Error("Server error");
-    }
-
-    const data = await response.json();
-
-    if (data.status === "success" && data.filename) {
-
-      photo.onload = () => {
-        currentPhoto = data.filename;
-        photoSection.style.display = "block";
-
-        clientMessage.style.color = "#55e6ff";
-        clientMessage.textContent =
-          "✨ Foto berhasil dibuka.";
-
-        loadPhotoAd();
-        resetButton();
-      };
-
-      photo.onerror = () => {
-        photoSection.style.display = "none";
-        clientMessage.style.color = "#ff6b6b";
-        clientMessage.textContent =
-          "❌ File gambar tidak ditemukan.";
-
-        resetButton();
-      };
-
-      photo.src = data.filename;
-
-    } else {
-      clientMessage.style.color = "#ff6b6b";
-      clientMessage.textContent =
-        data.message || "❌ Kode akses tidak valid.";
-
-      resetButton();
-    }
-
-  } catch (error) {
-    clientMessage.style.color = "#ff6b6b";
-    clientMessage.textContent =
-      "🌐 Gagal terhubung ke server.";
-
-    resetButton();
-  }
-});
-
+/* RESET TOMBOL */
 function resetButton() {
   openButton.disabled = false;
   buttonText.textContent = "Dekripsi & Buka Foto";
   loadingSpinner.style.display = "none";
 }
 
-/* ZOOM */
+/* SEMBUNYIKAN HASIL SEBELUM PENCARIAN BARU */
+function hideResults() {
+  photoSection.style.display = "none";
+  mediaSection.style.display = "none";
+
+  currentPhoto = "";
+
+  photo.onload = null;
+  photo.onerror = null;
+  photo.removeAttribute("src");
+
+  mediaOpenButton.removeAttribute("href");
+}
+
+/* TAMPILKAN PESAN */
+function showMessage(message, color = "#ff6b6b") {
+  clientMessage.style.color = color;
+  clientMessage.textContent = message;
+}
+
+/* PROSES PENCARIAN */
+async function searchCode() {
+  const code = accessCode.value.trim();
+  const thisRequest = ++requestNumber;
+
+  if (!/^\d{6}$/.test(code)) {
+    hideResults();
+    showMessage("⚠️ Masukkan tepat 6 digit angka.");
+    return;
+  }
+
+  hideResults();
+
+  openButton.disabled = true;
+  buttonText.textContent = "Menghubungkan ke Server...";
+  loadingSpinner.style.display = "block";
+
+  clientMessage.textContent = "";
+
+  try {
+    const apiURL =
+      SCRIPT_URL +
+      "?code=" + encodeURIComponent(code) +
+      "&t=" + Date.now();
+
+    const response = await fetch(apiURL, {
+      method: "GET",
+      cache: "no-store",
+      redirect: "follow"
+    });
+
+    if (!response.ok) {
+      throw new Error("Server merespons HTTP " + response.status);
+    }
+
+    const responseText = await response.text();
+
+    let data;
+
+    try {
+      data = JSON.parse(responseText);
+    } catch (error) {
+      console.error("Respons API:", responseText);
+      throw new Error(
+        "Respons server bukan JSON. Periksa URL dan deployment Apps Script."
+      );
+    }
+
+    console.log("HASIL API:", data);
+
+    if (thisRequest !== requestNumber) return;
+
+    /* KODE TIDAK DITEMUKAN ATAU API ERROR */
+    if (data.status !== "success") {
+      showMessage(
+        data.message || "❌ Kode foto atau media tidak ditemukan."
+      );
+      resetButton();
+      return;
+    }
+
+    /* HASIL FOTO DARI KOLOM A-B */
+    if (data.type === "photo") {
+      if (!data.filename) {
+        throw new Error("Nama file foto kosong dari database.");
+      }
+
+      photo.onload = () => {
+        if (thisRequest !== requestNumber) return;
+
+        currentPhoto = data.filename;
+        photoSection.style.display = "block";
+
+        showMessage("✨ Foto berhasil dibuka.", "#55e6ff");
+
+        loadPhotoAd();
+        resetButton();
+      };
+
+      photo.onerror = () => {
+        if (thisRequest !== requestNumber) return;
+
+        photoSection.style.display = "none";
+
+        showMessage("❌ File gambar tidak ditemukan.");
+        resetButton();
+      };
+
+      photo.src = data.filename;
+      return;
+    }
+
+    /* HASIL MEDIA DARI KOLOM C-D */
+    if (data.type === "media") {
+      if (!data.link) {
+        throw new Error("Link media kosong dari kolom D.");
+      }
+
+      let mediaURL;
+
+      try {
+        mediaURL = new URL(data.link);
+      } catch (error) {
+        throw new Error(
+          "Format link media tidak valid. Gunakan URL lengkap dengan https:// atau http://."
+        );
+      }
+
+      if (
+        mediaURL.protocol !== "https:" &&
+        mediaURL.protocol !== "http:"
+      ) {
+        throw new Error("Link media harus menggunakan HTTP atau HTTPS.");
+      }
+
+      mediaOpenButton.href = mediaURL.href;
+      mediaSection.style.display = "block";
+
+      showMessage("✨ Media berhasil ditemukan.", "#55e6ff");
+
+      resetButton();
+      return;
+    }
+
+    throw new Error(
+      "Jenis data tidak dikenali oleh website: " + String(data.type)
+    );
+
+  } catch (error) {
+    console.error("MEDIAHUB ERROR:", error);
+
+    if (thisRequest !== requestNumber) return;
+
+    showMessage("❌ " + error.message);
+    resetButton();
+  }
+}
+
+/* TOMBOL BUKA */
+openButton.addEventListener("click", searchCode);
+
+/* ENTER UNTUK MENCARI */
+accessCode.addEventListener("keydown", event => {
+  if (event.key === "Enter" && !openButton.disabled) {
+    searchCode();
+  }
+});
+
+/* IZINKAN INPUT ANGKA SAJA */
+accessCode.addEventListener("input", () => {
+  accessCode.value = accessCode.value
+    .replace(/\D/g, "")
+    .slice(0, 6);
+});
+
+/* ZOOM FOTO */
 function openZoom() {
   if (!currentPhoto) return;
 
@@ -562,17 +744,26 @@ document.getElementById("zoomButton")
 
 photo.addEventListener("click", openZoom);
 
+/* TUTUP ZOOM */
 document.getElementById("zoomClose")
   .addEventListener("click", () => {
     document.getElementById("zoomView").style.display = "none";
   });
 
-/* DOWNLOAD */
+document.getElementById("zoomView")
+  .addEventListener("click", event => {
+    if (event.target.id === "zoomView") {
+      document.getElementById("zoomView").style.display = "none";
+    }
+  });
+
+/* DOWNLOAD FOTO */
 document.getElementById("downloadButton")
   .addEventListener("click", () => {
     if (!currentPhoto) return;
 
     const link = document.createElement("a");
+
     link.href = currentPhoto;
     link.download = currentPhoto.split("/").pop();
 
@@ -580,13 +771,6 @@ document.getElementById("downloadButton")
     link.click();
     link.remove();
   });
-
-/* ENTER UNTUK MEMBUKA FOTO */
-accessCode.addEventListener("keydown", event => {
-  if (event.key === "Enter" && !openButton.disabled) {
-    openButton.click();
-  }
-});
 </script>
 
 </body>

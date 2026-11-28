@@ -1,5 +1,5 @@
 const BACKEND_URL =
-"https://script.google.com/macros/s/AKfycbznJTe8JZwQjYa_CWzNkH3xw3V-k6oAyOxmx1HK5x6O8nqTaze2vkphtDxp3K-sln1_/exec";
+"https://script.google.com/macros/s/AKfycbzvAzODr0DSFybalJS0UJChyn3VCHg9YfWNYmXt6VsWSk9o0szcFY5OpuFcYSIfloo6/exec";
 
 let videoType = "";
 
